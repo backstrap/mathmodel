@@ -1,0 +1,15 @@
+.idea/
+/coverage/
+/dist/
+/docs/
+/node_modules/
+/temp/
+/notes.txt
+.DS_Store
+*-debug.log*
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

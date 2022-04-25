@@ -1,0 +1,23 @@
+{
+    "plugins": [],
+    "opts": {
+        "recurse": true,
+        "encoding": "utf8",
+        "destination": "docs"
+    },
+    "source": {
+        "include" : ["src"],
+        "includePattern": ".+\\.js$"
+    },
+    "tags": {
+        "allowUnknownTags": true,
+        "dictionaries": ["jsdoc"]
+    },
+    "templates": {
+        "cleverLinks": true,
+        "monospaceLinks": true,
+        "default": {
+            "outputSourceFiles": true
+        }
+    }
+}

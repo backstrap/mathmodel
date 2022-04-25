@@ -1,0 +1,32 @@
+body {
+    overflow-x: hidden;
+}
+
+.mathcell {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: 0.5em auto;
+    width:  99%;
+    min-height: 5in;
+    min-width: 7.5in;
+    padding: 1em;
+    border: none;
+}
+
+.mathcell.sixD {
+    position: relative;
+    margin: 0;
+    min-width: 4in;
+    padding: 0;
+}
+
+.flex-container {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.flex-item {
+    /* flex:1 1 auto; */
+    flex-grow:1;
+}

@@ -1,0 +1,9 @@
+
+outFile="temp/three.js"
+headFile="src/three.js"
+bodyFile="node_modules/three/examples/js/controls/OrbitControls.js"
+
+[ ! $headFile -ot $outFile -o ! $bodyFile -ot $outFile ] \
+    && cat $headFile $bodyFile > $outFile
+exit 0
+

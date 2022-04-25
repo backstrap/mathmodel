@@ -1,0 +1,98 @@
+{
+  "name": "@backstrap/mathmodel",
+  "version": "1.0.0",
+  "description": "3D modeling and display package built on MathCell and Three",
+  "private": false,
+  "main": "dist/mathmodel.js",
+  "homepage": "https://github.com/kperry42/mathmodel/",
+  "author": "Kevin Perry perry@princeton.edu",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kperry42/mathmodel"
+  },
+  "dependencies": {
+    "@backstrap/math": "^1.4.9-a",
+    "@backstrap/mathcell": "^1.9.3-a",
+    "three": "^0.139.2"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.17.6",
+    "@babel/core": "^7.17.9",
+    "@babel/preset-env": "^7.16.11",
+    "babel-jest": "^27.5.1",
+    "babel-plugin-module-resolver": "^4.1.0",
+    "jest-cli": "^27.5.1",
+    "jsdoc": "^3.6.10",
+    "source-map-support": "^0.5.21",
+    "webpack": "^5.72.0",
+    "webpack-cli": "^4.9.2"
+  },
+  "scripts": {
+    "build": "rm -rf dist/* && bash buildThree && webpack --mode development",
+    "clean": "rm -rf dist/* coverage/*.* coverage/lcov-report/* docs/*",
+    "browserdb": "browserslist --update-db",
+    "doc": "rm -rf doc/* && jsdoc -c jsdoc.json",
+    "test": "rm -rf coverage/* && jest",
+    "watchtest": "rm -rf coverage/* && jest --watchAll"
+  },
+  "standard": {
+    "globals": [
+      "window"
+    ]
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ],
+    "plugins": [
+      [
+        "module-resolver",
+        {
+          "root": [
+            "./src"
+          ]
+        }
+      ]
+    ]
+  },
+  "jest": {
+    "automock": false,
+    "clearMocks": false,
+    "resetMocks": false,
+    "restoreMocks": false,
+    "verbose": false,
+    "collectCoverage": true,
+    "testEnvironment": "node",
+    "coverageDirectory": "<rootDir>/coverage",
+    "coverageReporters": [
+      "text",
+      "json",
+      "lcov"
+    ],
+    "extraGlobals": [
+      "JSON"
+    ],
+    "roots": [
+      "<rootDir>/src",
+      "<rootDir>/spec"
+    ],
+    "moduleFileExtensions": [
+      "js"
+    ],
+    "testMatch": [
+      "<rootDir>/spec/**/*.spec.js"
+    ],
+    "watchPathIgnorePatterns": [
+      "<rootDir>/.git/",
+      "<rootDir>/coverage/",
+      "<rootDir>/dist/",
+      "<rootDir>/docs/"
+    ]
+  },
+  "browserslist": [
+    "> 0.5%",
+    "last 2 versions",
+    "not dead"
+  ]
+}
