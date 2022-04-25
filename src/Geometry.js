@@ -1,7 +1,5 @@
 import {GeometryOptions} from './GeometryOptions';
 
-const knownTypes = ['surface', 'line', 'point', 'text'];
-
 /**
  * @property {string} type
  * @property {GeometryOptions} options
@@ -15,7 +13,7 @@ export class Geometry {
     /** @member {string} */
     type;
 
-    /** @member {GeometryObject} */
+    /** @member {GeometryOptions} */
     options;
 
     /** @member {number[][]} */
@@ -61,6 +59,8 @@ export class Geometry {
                 break;
 
             default:
+                console.log(data);
                 throw new Error('Unknown Geometry type: ' + data.type);
+        }
     }
 }

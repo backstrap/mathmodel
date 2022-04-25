@@ -1,12 +1,21 @@
 {
   "name": "@backstrap/mathmodel",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "3D modeling and display package built on MathCell and Three",
-  "private": false,
-  "main": "dist/mathmodel.js",
   "homepage": "https://github.com/kperry42/mathmodel/",
   "author": "Kevin Perry perry@princeton.edu",
   "license": "MIT",
+  "main": "src/index.js",
+  "files": [
+    "src/*.js",
+    "docs/"
+  ],
+  "scripts": {
+    "clean": "rm -rf coverage/*.* coverage/lcov-report/* docs/*",
+    "doc": "rm -rf doc/* && jsdoc -c jsdoc.json",
+    "test": "rm -rf coverage/* && jest",
+    "watchtest": "rm -rf coverage/* && jest --watchAll"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/kperry42/mathmodel"
@@ -27,14 +36,6 @@
     "source-map-support": "^0.5.21",
     "webpack": "^5.72.0",
     "webpack-cli": "^4.9.2"
-  },
-  "scripts": {
-    "build": "rm -rf dist/* && bash buildThree && webpack --mode development",
-    "clean": "rm -rf dist/* coverage/*.* coverage/lcov-report/* docs/*",
-    "browserdb": "browserslist --update-db",
-    "doc": "rm -rf doc/* && jsdoc -c jsdoc.json",
-    "test": "rm -rf coverage/* && jest",
-    "watchtest": "rm -rf coverage/* && jest --watchAll"
   },
   "standard": {
     "globals": [
@@ -86,13 +87,7 @@
     "watchPathIgnorePatterns": [
       "<rootDir>/.git/",
       "<rootDir>/coverage/",
-      "<rootDir>/dist/",
       "<rootDir>/docs/"
     ]
-  },
-  "browserslist": [
-    "> 0.5%",
-    "last 2 versions",
-    "not dead"
-  ]
+  }
 }

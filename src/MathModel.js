@@ -1,9 +1,10 @@
+// noinspection JSUnusedGlobalSymbols
+
 import {MathCell, generateId, getVariable} from '@backstrap/mathcell';
 import {Canvas} from './Canvas';
 
 /**
  * @typedef {Object} renderConfig
- * @property {string}              [pathToThreejs]
  * @property {boolean}             [axes]
  * @property {boolean}             [animate]
  * @property {boolean}             [equalAspect]
@@ -65,24 +66,25 @@ export class MathModel {
      */
     canvas = new Canvas('', {});
 
+    // noinspection JSUnusedGlobalSymbols
     /**
      * Attempt to load all mathcells in a document
      * @param {Document} document - a DOM document
      * @param {Object} classMap - an object which maps id's to Classes
      */
     static loadMathCells(document, classMap) {
-        for (let cell in document.getElementsByClassName('mathcell')) {
-            const id = cell.getAttribute('id');
-            /** @type {function(string=)} */
-            const Model = classMap[id];
+        window.addEventListener('load', () => {
+            for (const cell of document.getElementsByClassName('mathcell')) {
+                /** @type {function(string=)} */
+                const Model = classMap[cell.id];
 
-            if (Model) {
-                window.addEventListener('load', () => (new Model(id)).run(cell));
-            } else {
-                console.log('Unknown model id ' + id);
+                if (Model) {
+                    new Model(cell.id).run(cell);
+                } else {
+                    console.log('Unknown model id "' + cell.id + '"');
+                }
             }
-        }
-
+        });
     }
 
     /**
@@ -129,6 +131,16 @@ export class MathModel {
      */
     configure(config) {
         this.canvas.configure(config);
+        return this;
+    }
+
+    /**
+     * Set the location of the script URL for the rendering engine.
+     * @param {string} scriptUrl
+     * @returns {this}
+     */
+    setScriptUrl(scriptUrl) {
+        this.canvas.setScriptUrl(scriptUrl);
         return this;
     }
 

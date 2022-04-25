@@ -49,7 +49,6 @@ export class Coords {
         return this;
     }
 
-    // noinspection JSUnusedGlobalSymbols
     /**
      * @param {number} [x]
      * @param {number} [y]
@@ -79,7 +78,6 @@ export class Coords {
         return this;
     }
 
-    // noinspection JSUnusedGlobalSymbols
     /**
      * @returns {this}
      */
@@ -102,7 +100,9 @@ export class Coords {
      * @returns {number[]}
      */
     transform(v) {
-        return this.#matrix ? this.#matrix.slice(0, 3).map(r => r[0]*v[0] + r[1]*v[1] + r[2]*v[2] + r[3]) : v;
+        return this.#matrix ? this.#matrix.slice(0, 3).map(
+                r => r[0]*v[0] + r[1]*v[1] + r[2]*v[2] + r[3]
+            ) : v;
     }
 
     /**
@@ -111,6 +111,8 @@ export class Coords {
      * @returns {number[]}
      */
     orient(v) {
-        return this.#matrix ? this.#matrix.slice(0, 3).map(r => r[0]*v[0] + r[1]*v[1] + r[2]*v[2]) : v;
+        return this.#matrix ? this.#matrix.slice(0, 3).map(
+                r => r[0]*v[0] + r[1]*v[1] + r[2]*v[2]
+            ) : v;
     }
 }
