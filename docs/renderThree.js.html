@@ -1,4 +1,32 @@
-// noinspection JSUnusedAssignment,CommaExpressionJS,JSUnresolvedVariable,RedundantConditionalExpressionJS,ES6ConvertVarToLetConst,JSDeprecatedSymbols,JSDuplicatedDeclaration
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: renderThree.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: renderThree.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// noinspection JSUnusedAssignment,CommaExpressionJS,JSUnresolvedVariable,RedundantConditionalExpressionJS,ES6ConvertVarToLetConst,JSDeprecatedSymbols,JSDuplicatedDeclaration
 
 import * as THREE from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
@@ -38,7 +66,7 @@ var yRange = yMax - yMin;
 var zRange = zMax - zMin;
 var rRange = Math.sqrt( xRange*xRange + yRange*yRange );
 
-if ( zRange > rRange && a[2] === 1 && !config.equalAspect ) {
+if ( zRange > rRange &amp;&amp; a[2] === 1 &amp;&amp; !config.equalAspect ) {
   a[2] = rRange / zRange;
   zMin *= a[2];
   zMax *= a[2];
@@ -134,7 +162,7 @@ if ( config.viewpoint !== 'auto' ) {
 
 camera.position.add( defaultOffset );
 
-for ( var i = 0 ; i < lights.length ; i++ ) {
+for ( var i = 0 ; i &lt; lights.length ; i++ ) {
   var light = new THREE.DirectionalLight( lights[i].color, 1 );
   var v = lights[i].position;
   light.position.set( a[0]*v[0], a[1]*v[1], a[2]*v[2] );
@@ -177,12 +205,12 @@ function suspendAnimation() {
   suspendTimer = setTimeout( function() { if ( config.animate ) { animate = true; render(); } }, 5000 );
 }
 
-for ( var i = 0 ; i < texts.length ; i++ ) {
+for ( var i = 0 ; i &lt; texts.length ; i++ ) {
   var t = texts[i];
   addLabel( t.text, t.point[0], t.point[1], t.point[2], t.options.color, t.options.fontSize );
 }
 
-for ( var i = 0 ; i < points.length ; i++ ) addPoint( points[i] );
+for ( var i = 0 ; i &lt; points.length ; i++ ) addPoint( points[i] );
 
 function addPoint( p ) {
 
@@ -203,7 +231,7 @@ function addPoint( p ) {
   var texture = new THREE.Texture( canvas );
   texture.needsUpdate = true;
 
-  var transparent = p.options.opacity < 1 ? true : false;
+  var transparent = p.options.opacity &lt; 1 ? true : false;
   var material = new THREE.PointsMaterial( { size: p.options.size/20, map: texture,
                                              transparent: transparent, opacity: p.options.opacity,
                                              alphaTest: .1 } );
@@ -221,26 +249,26 @@ function addPoint( p ) {
 
 var newLines = [], tempPoints = [];
 
-for ( var i = 0 ; i < lines.length ; i++ ) {
+for ( var i = 0 ; i &lt; lines.length ; i++ ) {
 
   lines[i].points.forEach( v => {
     // apply aspect multipliers for convenience
     //   and set points outside bounds or NaN to empty array
     v[0] *= a[0]; v[1] *= a[1]; v[2] *= a[2];
-    if ( v[0] < xMin || v[0] > xMax || v[1] < yMin || v[1] > yMax
-           || v[2] < zMin || v[2] > zMax || isNaN(v[2]) )
+    if ( v[0] &lt; xMin || v[0] > xMax || v[1] &lt; yMin || v[1] > yMax
+           || v[2] &lt; zMin || v[2] > zMax || isNaN(v[2]) )
       v.splice(0);
   } );
 
   // split lines at empty points
-  for ( var j = 0 ; j < lines[i].points.length ; j++ )
+  for ( var j = 0 ; j &lt; lines[i].points.length ; j++ )
     if ( lines[i].points[j].length === 0 ) {
       tempPoints = lines[i].points.splice( j );
       if ( j === 0 ) lines[i].points = [[0,0,0]]; // dummy line for options
     }
 
   var l = [];
-  for ( var j = 0 ; j < tempPoints.length ; j++ ) {
+  for ( var j = 0 ; j &lt; tempPoints.length ; j++ ) {
     var p = tempPoints[j];
     if ( p.length > 0 ) l.push( p );
     else if ( l.length > 0 ) {
@@ -255,12 +283,12 @@ for ( var i = 0 ; i < lines.length ; i++ ) {
 newLines.forEach( l => lines.push( l ) );
 newLines = [], tempPoints = [];
 
-for ( var i = 0 ; i < lines.length ; i++ ) addLine( lines[i] );
+for ( var i = 0 ; i &lt; lines.length ; i++ ) addLine( lines[i] );
 
 function addLine( l ) {
 
   var vertices = [];
-  for ( var i = 0 ; i < l.points.length ; i++ ) {
+  for ( var i = 0 ; i &lt; l.points.length ; i++ ) {
     var v = l.points[i];
     vertices.push( v[0], v[1], v[2] );
   }
@@ -268,7 +296,7 @@ function addLine( l ) {
   var geometry = new THREE.BufferGeometry();
   geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
 
-  var transparent = l.options.opacity < 1 ? true : false;
+  var transparent = l.options.opacity &lt; 1 ? true : false;
   var material = new THREE.LineBasicMaterial( { color: l.options.color, linewidth: l.options.linewidth,
                                                 transparent: transparent, opacity: l.options.opacity } );
 
@@ -284,7 +312,7 @@ function addLine( l ) {
 
 }
 
-for ( var i = 0 ; i < surfaces.length ; i++ ) addSurface( surfaces[i] );
+for ( var i = 0 ; i &lt; surfaces.length ; i++ ) addSurface( surfaces[i] );
 
 function addSurface( s ) {
 
@@ -297,7 +325,7 @@ function addSurface( s ) {
   for ( var i = s.faces.length - 1 ; i >= 0 ; i-- ) {
     var f = s.faces[i];
 
-    if ( f.every( index => s.vertices[index][2] < zMin ) ) s.faces.splice( i, 1 );
+    if ( f.every( index => s.vertices[index][2] &lt; zMin ) ) s.faces.splice( i, 1 );
     if ( f.every( index => s.vertices[index][2] > zMax ) ) s.faces.splice( i, 1 );
 
     var check = false;
@@ -313,15 +341,15 @@ function addSurface( s ) {
   badVertices.forEach( index => s.vertices[index][2] = 0 );
 
   // constrain vertices to vertical range
-  for ( var i = 0 ; i < s.vertices.length ; i++ ) {
-    if ( s.vertices[i][2] < zMin ) s.vertices[i][2] = zMin;
+  for ( var i = 0 ; i &lt; s.vertices.length ; i++ ) {
+    if ( s.vertices[i][2] &lt; zMin ) s.vertices[i][2] = zMin;
     if ( s.vertices[i][2] > zMax ) s.vertices[i][2] = zMax;
   }
 
   var indices = [];
-  for ( var i = 0 ; i < s.faces.length ; i++ ) {
+  for ( var i = 0 ; i &lt; s.faces.length ; i++ ) {
     var f = s.faces[i];
-    for ( var j = 0 ; j < f.length - 2 ; j++ )
+    for ( var j = 0 ; j &lt; f.length - 2 ; j++ )
       indices.push( f[0], f[j+1], f[j+2] );
   }
 
@@ -331,7 +359,7 @@ function addSurface( s ) {
   geometry.computeVertexNormals();
 
   var side = s.options.singleSide ? THREE.FrontSide : THREE.DoubleSide;
-  var transparent = s.options.opacity < 1 ? true : false;
+  var transparent = s.options.opacity &lt; 1 ? true : false;
   var material;
 
   switch ( s.options.material ) {
@@ -361,7 +389,7 @@ function addSurface( s ) {
 
   if ( 'colors' in s.options ) {
     var colors = [];
-    for ( var i = 0 ; i < s.options.colors.length ; i++ ) {
+    for ( var i = 0 ; i &lt; s.options.colors.length ; i++ ) {
       var c = s.options.colors[i];
       colors.push( c.r, c.g, c.b );
     }
@@ -428,7 +456,7 @@ function render() {
 
   scene.children.forEach( child => {
 
-    if ( child.userData.rotateOnAxis && animate )
+    if ( child.userData.rotateOnAxis &amp;&amp; animate )
       child.rotateOnAxis( child.userData.axis, child.userData.angle );
 
   } );
@@ -441,3 +469,26 @@ if ( !animate ) render();
 
 };
 
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Canvas.html">Canvas</a></li><li><a href="Coords.html">Coords</a></li><li><a href="Geometry.html">Geometry</a></li><li><a href="GeometryOptions.html">GeometryOptions</a></li><li><a href="GroupedShape.html">GroupedShape</a></li><li><a href="MathModel.html">MathModel</a></li><li><a href="Plot.html">Plot</a></li><li><a href="Shape.html">Shape</a></li><li><a href="Solid.html">Solid</a></li><li><a href="Surface.html">Surface</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Wed Apr 27 2022 09:56:54 GMT-0400 (Eastern Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

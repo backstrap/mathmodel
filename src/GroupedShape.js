@@ -11,7 +11,7 @@ export class GroupedShape extends Shape {
      */
     constructor(parent = null) {
         super(parent);
-        this.setParams({
+        this.setOptions({
             group: this.constructor.name + '-' + generateId(),
         });
     }

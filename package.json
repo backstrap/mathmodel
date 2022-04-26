@@ -1,11 +1,16 @@
 {
   "name": "@backstrap/mathmodel",
-  "version": "1.1.0",
+  "version": "1.1.5",
   "description": "3D modeling and display package built on MathCell and Three",
   "homepage": "https://github.com/kperry42/mathmodel/",
   "author": "Kevin Perry perry@princeton.edu",
   "license": "MIT",
   "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./thin": "./src/thin.js",
+    "./render": "./src/renderThree.js"
+  },
   "files": [
     "src/*.js",
     "docs/"
@@ -13,6 +18,7 @@
   "scripts": {
     "clean": "rm -rf coverage/*.* coverage/lcov-report/* docs/*",
     "doc": "rm -rf doc/* && jsdoc -c jsdoc.json",
+    "publish": "rm -rf doc/* && jsdoc -c jsdoc.json && npm publish",
     "test": "rm -rf coverage/* && jest",
     "watchtest": "rm -rf coverage/* && jest --watchAll"
   },

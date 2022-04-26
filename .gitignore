@@ -1,6 +1,5 @@
 .idea/
 /coverage/
-/docs/
 /node_modules/
 /notes.txt
 .DS_Store
