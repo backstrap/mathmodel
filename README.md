@@ -1,6 +1,6 @@
 # The MathModel Package
 
-## What It Is
+## What it is
 
 The MathModel package is a 3D modeling and display package built on top of
 Paul Masson's MathCell package and the Three render engine.
@@ -8,9 +8,10 @@ It also makes use of Paul Masson's "math" package of mathematical functions.
 
 MathModel provides a simple, fluent, and object-oriented API for drawing 3D graphics.
 
-## API Documentation
+## API documentation
 
-API documentation is included in the NPM package in the "/docs" folder.
+API documentation is included in the NPM package in the "/docs" folder,
+and published on [GitHub Pages](https://backstrap.github.io/mathmodel/).
 
 ## How to use
 
@@ -38,7 +39,16 @@ Here we add a cube with side length 2 and a sphere of diameter 1 to our scene.
         }
     }
 
-A basic HTML page that will display a MathModel graphic looks like this:
+Explore the Shape, Surface, Solid, and Plot classes to see what
+methods are available for creating graphic objects.
+At the most basic level, there are the Shape methods surface(), wireframe() and curve().
+The Surface class provides 2D primitives like rect() and disc().
+The Solid class provides 3D solid objects like block(), cone(), and sphere().
+And the Plot class provides various plotting methods - point() and text(),
+as well as more advanced plots.
+
+Once you've built defined your scene, you'll want to display it!
+A basic HTML page that will display a MathModel looks like this:
 
     <!DOCTYPE html>
     <html lang="en">
@@ -52,17 +62,11 @@ A basic HTML page that will display a MathModel graphic looks like this:
       </body>
     </html>
 
-Note that we've referenced "main.js" which is webpack's default output filename.
+Note that we've referenced "main.js" here, which is webpack's default output filename.
 Also, the "mathcell" classname here is special (as explained in a moment).
 With the above HTML file and MyModel1 class in hand, we can now create an
-entrypoint index.js file, which will load and draw the scene.
-It just needs to call the loadMathCells() method,
-passing it an object which maps div id's to classnames.
-The loadMathCells() method will search for all the HTML elements in our document
-that have class="mathcell", and if the element has an id which appears in our map,
-then it will instantiate the associated MathModel class
-and  tell it to draw that scene inside that element.
-So here's our index.js:
+entrypoint "index.js" file which will load and draw the scene.
+Here's our index.js:
 
     import {MathModel} from '@backstrap/mathmodel';
     import {MyModel1} from './MyModel1';
@@ -71,16 +75,25 @@ So here's our index.js:
         mymodel1: MyModel1,
     });
 
+It just needs to call MathModel.loadMathCells(),
+passing it an object which defines a map from  the id's of div's on our page to MathModel classes.
+The loadMathCells() method will search for all the HTML elements in our document
+that have class="mathcell", and if the element has an id which appears in our map,
+then it will instantiate the associated MathModel class
+and  tell it to draw that scene inside that element.
+
 In this way, a single compiled main.js file can support multiple
 graphics on one page, or even multiple graphics across multiple pages.
 Just assign a unique id, and the class "mathcell", to each div that you want graphics in,
 and then list them all in the object that you pass to MathModel.loadMathCells()!
 
-Nte that if you name your script file something other than "main.js",
+Note that if you name your script file something other than "main.js",
 or put it in a different folder,
 or you want to load it from a CDN,
 then you will need to call the setScriptUrl() method on your MathModel classes,
 to tell them where to find it.
+
+## Advanced: Breaking things up into multiple JS files
 
 It is also possible to import from "@backstrap/mathmodel/thin" instead of "@backstrap/mathmodel",
 which will build your "main.js" file without including the render engine code.
