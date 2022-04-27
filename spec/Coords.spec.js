@@ -1,3 +1,5 @@
+// noinspection ES6PreferShortImport
+
 import {Coords} from '../src/Coords';
 
 describe('Coords', () => {
@@ -42,6 +44,14 @@ describe('Coords', () => {
             expect(subject.rotate()).toBe(subject);
             expect(subject.rotate(1, 1)).toBe(subject);
             expect(subject.rotate(1, 2)).toBe(subject);
+        });
+    });
+
+    describe('quaternion method', () => {
+        it('returns this', () => {
+            expect(subject.quaternion()).toBe(subject);
+            expect(subject.quaternion([0, 0, 0, 0])).toBe(subject);
+            expect(subject.quaternion([1, 1, 0, 0])).toBe(subject);
         });
     });
 

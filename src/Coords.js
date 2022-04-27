@@ -1,4 +1,4 @@
-import {sin, cos, identity, matrixMul} from '@backstrap/math';
+import {sqrt, sin, cos, identity, matrixMul} from '@backstrap/math';
 
 /**
  * Compose two matrices (with null arg equivalent to identity matrix)
@@ -27,7 +27,7 @@ export class Coords {
      * @param {Coords} parent
      */
     constructor(parent = null) {
-        this.#matrix = (parent ? parent : this).#matrix;
+        this.#matrix = (parent || this).#matrix;
     }
 
     /**
@@ -72,15 +72,45 @@ export class Coords {
 
     /**
      * @param {number} [angle]
-     * @param {number} [axis] - axis index (0, 1, or 2)
+     * @param {number|number[]} [axis] - either an axis index (0, 1, 2) or an axis vector
      * @returns {this}
      */
     rotate(angle = 0, axis = 0) {
-        const a = axis > 0 ? 0 : 1;
-        const b = axis < 2 ? 2 : 1;
         const r = identity(4);
-        r[a][a] = r[b][b] = cos(angle);
-        r[a][b] = -(r[b][a] = sin(angle));
+
+        if (axis.length) {
+            const r = sqrt(axis[0]**2 + axis[1]**2 + axis[2]**2);
+            const x = axis[0]/r, y = axis[1]/r, z = axis[2]/r;
+            const c = cos(angle), s = sin(angle);
+            r[0] = [c + (1 - c)*x**2, x*y*(1 - c) - z*s, x*z*(1 - c) + y*s, 0];
+            r[1] = [x*y*(1 - c) + z*s, c + (1 - c)*y**2, y*z*(1 - c) - x*s, 0];
+            r[2] = [x*z*(1 - c) - y*s, y*z*(1 - c) + x*s, c + (1 - c)*z**2, 0];
+        } else {
+            const a = axis > 0 ? 0 : 1;
+            const b = axis < 2 ? 2 : 1;
+            r[a][a] = r[b][b] = cos(angle);
+            r[a][b] = -(r[b][a] = sin(angle));
+        }
+
+        this.#matrix = compose(this.#matrix, r);
+        return this;
+    }
+
+    /**
+     * Rotate by a quaternion
+     * @param {number[]} q - a quaternion
+     * @returns {this}
+     */
+    quaternion(q) {
+        const h = q[0], i = q[1], j = q[2], k = q[3];
+        const norm = h**2 + i**2 + j**2 + k**2;
+        const s = norm > 0 ? 2/norm : 0;
+        const r = [
+            [1 - s*(j**2 + k**2), s*(i*j - k*h), s*(i*k + j*h), 0],
+            [s*(i*j + k*h), 1 - s*(i**2 + k**2), s*(j*k - i*h), 0],
+            [s*(i*k - j*h), s*(j*k + i*h), 1 - s*(i**2 + j**2), 0],
+            [0, 0, 0, 1]
+        ];
         this.#matrix = compose(this.#matrix, r);
         return this;
     }

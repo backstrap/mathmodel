@@ -11,15 +11,4 @@ import {Surface} from './Surface';
 import {Solid} from './Solid';
 import {Plot} from './Plot';
 
-export {
-    Canvas,
-    Coords,
-    Geometry,
-    GeometryOptions,
-    GroupedShape,
-    MathModel,
-    Shape,
-    Surface,
-    Solid,
-    Plot,
-};
+export {Canvas, Coords, Geometry, GeometryOptions, GroupedShape, MathModel, Shape, Surface, Solid, Plot};

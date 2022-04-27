@@ -4,9 +4,9 @@ import * as THREE from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 
 /**
- * The body of the renderThree() function is essentially the boilerplate code
- * from the inlined script created by
- * @backstrap/mathcell/src/render/threejs-template.js:threejsTemplate()
+ * The body of the renderThree() function is essentially
+ * a copy of the boilerplate code from the inlined script
+ * created by @backstrap/mathcell/src/render/threejs-template.js:threejsTemplate()
  * It is used in the template created by mathmodel's threejsTemplate() function.
  */
 window.renderThree = function renderThree() {
