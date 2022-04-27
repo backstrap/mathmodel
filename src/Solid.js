@@ -10,7 +10,8 @@ import {Surface} from './Surface';
  */
 export class Solid extends Shape {
     /**
-     * @type {function(number=, number=, number=): Geometry[]}
+     * Generate a block (a cuboid.)
+     *
      * @param {number} [w] - width
      * @param {number} [h] - height
      * @param {number} [d] - depth
@@ -28,31 +29,29 @@ export class Solid extends Shape {
     }
 
     /**
-     * Generate a rod - a cylinder with closed ends.
+     * Generate a rod (a solid cylinder, with ends.)
      *
-     * @type {function(number=, number=): Geometry[]}
      * @param [r] - radius
      * @param [h] - height
-     * @returns {Geometry[]}
+     * @returns {Geometry[][]}
      */
     rod(r = 1, h = 1) {
         const surface = new Surface(this);
-        return surface.surface.cylinder(r, h)
-            .concat(surface.surface.dupe().translate(h*0.5, 0, 0).disc(r))
-            .concat(surface.surface.dupe().translate(-h*0.5, 0, 0).rotate(pi).disc(r));
+        return surface.cylinder(r, h)
+            .concat(surface.dupe().translate(h*0.5, 0, 0).disc(r))
+            .concat(surface.dupe().translate(-h*0.5, 0, 0).rotate(pi).disc(r));
     }
 
     /**
-     * Generate a cone, or a portion of one.
+     * Generate a solid cone.
      *
      * @param {number} r - radius
      * @param {number} h - height
-     * @param {number} angle - included arc angle
      * @returns {Geometry[][]}
      */
-    cone(r = 1, h = 1, angle = 2*pi) {
+    cone(r = 1, h = 1) {
         const surface = new Surface(this);
-        return surface.conic(0, r, h, angle)
+        return surface.conic(0, r, h)
             .concat(surface.dupe().translate(-h*0.5, 0, 0).rotate(pi).disc(r));
     }
 

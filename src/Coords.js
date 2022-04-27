@@ -1,19 +1,26 @@
 import {sin, cos, identity, matrixMul} from '@backstrap/math';
 
 /**
- * @type {function(number[][]|null, number[][]): number[][]}
+ * Compose two matrices (with null arg equivalent to identity matrix)
+ * @type {function(number[][]?, number[][]?): number[][]}
  * @private
  */
-const compose = ((a, b) => a ? matrixMul(a, b) : b);
+const compose = ((a, b) => a && b ? matrixMul(a, b) : b || a);
 
 /**
  * Class representing a 3D coordinate system.
  */
 export class Coords {
-    /** @type {number[][]|null} */
+    /**
+     * The current transformation matrix.
+     * @member {number[][]|null}
+     */
     #matrix = null;
 
-    /** @type {number} */
+    /**
+     * Nominal step-count for parametric curves and surfaces.
+     * @member {number}
+     */
     dv = 100;
 
     /**

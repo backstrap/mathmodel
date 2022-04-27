@@ -6,8 +6,8 @@
         "destination": "docs"
     },
     "source": {
-        "include" : ["src"],
-        "includePattern": ".+\\.js$"
+        "include" : ["src", "README.md"],
+        "includePattern": ".+\\.(js|md)$"
     },
     "tags": {
         "allowUnknownTags": true,
@@ -17,7 +17,8 @@
         "cleverLinks": true,
         "monospaceLinks": true,
         "default": {
-            "outputSourceFiles": true
+            "outputSourceFiles": true,
+            "includeDate": false
         }
     }
 }

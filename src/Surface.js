@@ -27,7 +27,8 @@ export class Surface extends Shape {
     }
 
     /**
-     * @type {function(number=, number=): Geometry[]}
+     * Generate a regular polygon with N sides.
+     *
      * @param {number} n - number of sides
      * @param {number} r - radius of circumscribed circle
      * @returns {Geometry[][]}

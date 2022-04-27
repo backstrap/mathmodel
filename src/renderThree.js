@@ -1,4 +1,4 @@
-// noinspection JSUnusedAssignment,CommaExpressionJS,JSUnresolvedVariable,RedundantConditionalExpressionJS,ES6ConvertVarToLetConst,JSDeprecatedSymbols,JSDuplicatedDeclaration
+// noinspection JSUnusedAssignment,CommaExpressionJS,JSUnresolvedVariable,RedundantConditionalExpressionJS,ES6ConvertVarToLetConst,JSDeprecatedSymbols,JSDuplicatedDeclaration,JSUnresolvedFunction
 
 import * as THREE from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';

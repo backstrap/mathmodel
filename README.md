@@ -95,7 +95,7 @@ and do nothing else:
     export {dummy};
 
 Then your webpack config might have an entry spec like this,
-which impplements the default entrypoint rule plus one for our "render" entrypoint:
+which implements the default entrypoint rule plus one for our "render" entrypoint:
 
     entry: {
       main: './src/index.js',

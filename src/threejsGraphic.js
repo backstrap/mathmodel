@@ -30,7 +30,6 @@ export function threejsGraphic(id, data, config, scriptUrl) {
   if ( output.children.length > 0 && output.children[0].contentWindow ) {
 
     var cw = output.children[0].contentWindow;
-    // TODO Errors out here when using inputs!
     var v = cw.camera.position;
 
     // only direction of viewpoint meaningful, not normalization
