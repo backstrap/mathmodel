@@ -10,6 +10,7 @@ import {Coords} from './Coords';
  * @param {number} color.saturation - color saturation percentage
  * @param {number} color.lightness - color lightness percentage
  * @returns {string}
+ * @private
  */
 const hslColor = function ({hue, saturation, lightness}) {
     return `hsl(${hue},${saturation}%,${lightness}%)`;
