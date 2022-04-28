@@ -49,7 +49,6 @@ describe('Coords', () => {
 
     describe('quaternion method', () => {
         it('returns this', () => {
-            expect(subject.quaternion()).toBe(subject);
             expect(subject.quaternion([0, 0, 0, 0])).toBe(subject);
             expect(subject.quaternion([1, 1, 0, 0])).toBe(subject);
         });
