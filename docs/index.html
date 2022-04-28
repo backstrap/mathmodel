@@ -43,23 +43,29 @@
 
 
     <section>
-        <article><h1>The MathModel Package</h1>
-<h2>What It Is</h2>
+        <article><h2>The MathModel Package</h2>
+<h3>What it is</h3>
 <p>The MathModel package is a 3D modeling and display package built on top of
-Paul Masson's MathCell package and the Three render engine.
-It also makes use of Paul Masson's &quot;math&quot; package of mathematical functions.</p>
-<p>MathModel provides a simple, fluent, and object-oriented API for drawing 3D graphics.</p>
-<h2>API Documentation</h2>
-<p>API documentation is included in the NPM package in the &quot;/docs&quot; folder.</p>
-<h2>How to use</h2>
+Paul Masson's <a href="https://paulmasson.github.io/mathcell/">MathCell</a> package
+and the <a href="https://threejs.org/">Three.js</a> render engine.
+It also makes use of Paul Masson's <a href="https://paulmasson.github.io/math/">&quot;math&quot;</a>
+package of mathematical functions.</p>
 <p>MathModel is built on top of
 the excellent mathcell and math packages by Paul Masson (refs needed).
 It provides a very simple, straightforward, yet powerful
 3D graphics drawing API.</p>
-<p>The simplest way to use it is as follows.  First, install it in your project.</p>
+<p>MathModel provides a simple, fluent, and object-oriented API for drawing 3D graphics.</p>
+<h3>API documentation</h3>
+<p>API documentation is included in the NPM package in the &quot;/docs&quot; folder,
+and published on <a href="https://backstrap.github.io/mathmodel/">GitHub Pages</a>.</p>
+<h3>How to use</h3>
+<p>The simplest way to use MathModel is to use
+<a href="https://www.npmjs.com/package/@backstrap/mathmodel">the NPM package</a>
+as follows.
+First, install it as a dependency in your project.</p>
 <pre><code>npm install --save  @backstrap/mathmodel
 </code></pre>
-<p>Then you can extend the MathModel class to create a scene.
+<p>Now you can define a subclass of the MathModel class to create a scene.
 At its simplest, you just need to override the update() method.
 Most methods are chainable where appropriate.
 Here we add a cube with side length 2 and a sphere of diameter 1 to our scene.</p>
@@ -73,7 +79,22 @@ class MyModel1 extends MathModel {
     }
 }
 </code></pre>
-<p>A basic HTML page that will display a MathModel graphic looks like this:</p>
+<p>Explore the
+<a href="Shape.html">Shape</a>, <a href="Surface.html">Surface</a>,
+<a href="Solid.html">Solid</a>, and <a href="Plot.html">Plot</a>
+classes to see what methods are available for creating graphic objects.
+At the most basic level, there are the Shape methods surface(), wireframe() and curve().
+The Surface class provides 2D primitives like rect() and disc().
+The Solid class provides 3D solid objects like block(), cone(), and sphere().
+And the Plot class provides various plotting methods - point() and text(),
+as well as more advanced plots.</p>
+<p>You might also like to install and use
+<a href="https://www.npmjs.com/package/@backstrap/math">the &quot;math&quot; NPM package</a>
+as well, for some useful mathematical functions, but this is entirely optional.</p>
+<pre><code>npm install --save  @backstrap/math
+</code></pre>
+<p>Once you've defined your scene, you'll want to display it.
+A basic HTML page that will display a MathModel looks like this:</p>
 <pre><code>&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;en&quot;&gt;
   &lt;head&gt;
@@ -86,17 +107,11 @@ class MyModel1 extends MathModel {
   &lt;/body&gt;
 &lt;/html&gt;
 </code></pre>
-<p>Note that we've referenced &quot;main.js&quot; which is webpack's default output filename.
+<p>Note that we've referenced &quot;main.js&quot; here, which is webpack's default output filename.
 Also, the &quot;mathcell&quot; classname here is special (as explained in a moment).
 With the above HTML file and MyModel1 class in hand, we can now create an
-entrypoint index.js file, which will load and draw the scene.
-It just needs to call the loadMathCells() method,
-passing it an object which maps div id's to classnames.
-The loadMathCells() method will search for all the HTML elements in our document
-that have class=&quot;mathcell&quot;, and if the element has an id which appears in our map,
-then it will instantiate the associated MathModel class
-and  tell it to draw that scene inside that element.
-So here's our index.js:</p>
+entrypoint &quot;index.js&quot; file which will load and draw the scene.
+Here's our index.js:</p>
 <pre><code>import {MathModel} from '@backstrap/mathmodel';
 import {MyModel1} from './MyModel1';
 
@@ -104,15 +119,22 @@ MathModel.loadMathCells(document, {
     mymodel1: MyModel1,
 });
 </code></pre>
+<p>It just needs to call MathModel.loadMathCells(),
+passing it an object which defines a map from  the id's of div's on our page to MathModel classes.
+The loadMathCells() method will search for all the HTML elements in our document
+that have class=&quot;mathcell&quot;, and if the element has an id which appears in our map,
+then it will instantiate the associated MathModel class
+and  tell it to draw that scene inside that element.</p>
 <p>In this way, a single compiled main.js file can support multiple
 graphics on one page, or even multiple graphics across multiple pages.
 Just assign a unique id, and the class &quot;mathcell&quot;, to each div that you want graphics in,
 and then list them all in the object that you pass to MathModel.loadMathCells()!</p>
-<p>Nte that if you name your script file something other than &quot;main.js&quot;,
+<p>Note that if you name your script file something other than &quot;main.js&quot;,
 or put it in a different folder,
 or you want to load it from a CDN,
 then you will need to call the setScriptUrl() method on your MathModel classes,
 to tell them where to find it.</p>
+<h3>Advanced: Breaking things up into multiple JS files</h3>
 <p>It is also possible to import from &quot;@backstrap/mathmodel/thin&quot; instead of &quot;@backstrap/mathmodel&quot;,
 which will build your &quot;main.js&quot; file without including the render engine code.
 This makes for a smaller &quot;main.js&quot;.
@@ -167,7 +189,7 @@ which all share a single render.js.</p></article>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Canvas.html">Canvas</a></li><li><a href="Coords.html">Coords</a></li><li><a href="Geometry.html">Geometry</a></li><li><a href="GeometryOptions.html">GeometryOptions</a></li><li><a href="GroupedShape.html">GroupedShape</a></li><li><a href="MathModel.html">MathModel</a></li><li><a href="Plot.html">Plot</a></li><li><a href="Shape.html">Shape</a></li><li><a href="Solid.html">Solid</a></li><li><a href="Surface.html">Surface</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Canvas.html">Canvas</a></li><li><a href="Coords.html">Coords</a></li><li><a href="Geometry.html">Geometry</a></li><li><a href="GeometryOptions.html">GeometryOptions</a></li><li><a href="Graphable.html">Graphable</a></li><li><a href="GroupedShape.html">GroupedShape</a></li><li><a href="MathModel.html">MathModel</a></li><li><a href="Plot.html">Plot</a></li><li><a href="Shape.html">Shape</a></li><li><a href="Solid.html">Solid</a></li><li><a href="Surface.html">Surface</a></li></ul><h3>Global</h3><ul><li><a href="global.html#hslColor">hslColor</a></li></ul>
 </nav>
 
 <br class="clear">

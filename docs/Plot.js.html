@@ -26,7 +26,9 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import {point, text} from '@backstrap/mathcell';
+            <pre class="prettyprint source linenums"><code>// noinspection JSUnusedGlobalSymbols
+
+import {point, text, listPlot, surfaceFromLines} from '@backstrap/mathcell';
 import {Shape} from './Shape';
 import {Geometry} from './Geometry';
 
@@ -36,23 +38,58 @@ import {Geometry} from './Geometry';
  */
 export class Plot extends Shape {
     /**
-     * @param {number[]} vector
-     * @returns {Geometry[][]}
-     */
-    point(vector) {
-        return [point(vector, this.options()).map(obj => new Geometry(obj))];
-    }
-
-    /**
-     * @param {string} str
-     * @param {number[]} vector
+     * Draw a text string.
+     * @param {string} str - the text to display
+     * @param {number[]} vector - position to display the text at
      * @returns {Geometry[][]}
      */
     text(str, vector) {
-        return [text(str, vector, this.options()).map(obj => new Geometry(obj))];
+        return this.#objectify(text(str, this.transform(vector), this.options()));
     }
 
-    // TODO Impl. plot, listPlot, polyline, isoline, etc.
+    /**
+     * Plot a single point.
+     * @param {number[]} vector - position of point to be plotted
+     * @returns {Geometry[][]}
+     */
+    point(vector) {
+        return this.#objectify(point(this.transform(vector), this.options()));
+    }
+
+    /**
+     * Plot a list of points.
+     * @param {number[][]} points - list of points to be plotted.
+     * @returns {Geometry[][]}
+     */
+    listPlot(points) {
+        return this.#objectify(listPlot(points.map(p => this.transform(p)), this.options()));
+    }
+
+    /**
+     * Plot a curve (polyline) from a list of points.
+     * @param {number[][]} vertices - list of points on the curve.
+     * @returns {Geometry[][]}
+     */
+    curvePlot(vertices) {
+        return this.#objectify(surfaceFromLines([vertices.map(p => this.transform(p))], this.options()));
+    }
+
+    /**
+     * Uses the mathcell surfaceFromLines() function to draw a surface.
+     * @param {number[][][]} vertices - 2D array of points to use as a surface mesh
+     * @returns {Geometry[][]}
+     */
+    surfacePlot(vertices) {
+        return this.#objectify(surfaceFromLines(vertices.map(row => row.map(p => this.transform(p))), this.options()));
+    }
+
+    /**
+     * @param {Object[]} arr
+     * @returns {Geometry[][]}
+     */
+    #objectify(arr) {
+        return [arr.map(obj => new Geometry(obj))];
+    }
 }
 </code></pre>
         </article>
@@ -64,7 +101,7 @@ export class Plot extends Shape {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Canvas.html">Canvas</a></li><li><a href="Coords.html">Coords</a></li><li><a href="Geometry.html">Geometry</a></li><li><a href="GeometryOptions.html">GeometryOptions</a></li><li><a href="GroupedShape.html">GroupedShape</a></li><li><a href="MathModel.html">MathModel</a></li><li><a href="Plot.html">Plot</a></li><li><a href="Shape.html">Shape</a></li><li><a href="Solid.html">Solid</a></li><li><a href="Surface.html">Surface</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Canvas.html">Canvas</a></li><li><a href="Coords.html">Coords</a></li><li><a href="Geometry.html">Geometry</a></li><li><a href="GeometryOptions.html">GeometryOptions</a></li><li><a href="Graphable.html">Graphable</a></li><li><a href="GroupedShape.html">GroupedShape</a></li><li><a href="MathModel.html">MathModel</a></li><li><a href="Plot.html">Plot</a></li><li><a href="Shape.html">Shape</a></li><li><a href="Solid.html">Solid</a></li><li><a href="Surface.html">Surface</a></li></ul><h3>Global</h3><ul><li><a href="global.html#hslColor">hslColor</a></li></ul>
 </nav>
 
 <br class="clear">

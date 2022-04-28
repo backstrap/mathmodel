@@ -3,8 +3,15 @@
 ### What it is
 
 The MathModel package is a 3D modeling and display package built on top of
-Paul Masson's MathCell package and the Three render engine.
-It also makes use of Paul Masson's "math" package of mathematical functions.
+Paul Masson's [MathCell](https://paulmasson.github.io/mathcell/) package
+and the [Three.js](https://threejs.org/) render engine.
+It also makes use of Paul Masson's ["math"](https://paulmasson.github.io/math/)
+package of mathematical functions.
+
+MathModel is built on top of
+the excellent mathcell and math packages by Paul Masson (refs needed).
+It provides a very simple, straightforward, yet powerful
+3D graphics drawing API.
 
 MathModel provides a simple, fluent, and object-oriented API for drawing 3D graphics.
 
@@ -15,16 +22,14 @@ and published on [GitHub Pages](https://backstrap.github.io/mathmodel/).
 
 ### How to use
 
-MathModel is built on top of
-the excellent mathcell and math packages by Paul Masson (refs needed).
-It provides a very simple, straightforward, yet powerful
-3D graphics drawing API.
-
-The simplest way to use it is as follows.  First, install it in your project.
+The simplest way to use MathModel is to use
+[the NPM package](https://www.npmjs.com/package/@backstrap/mathmodel)
+as follows.
+First, install it as a dependency in your project.
 
     npm install --save  @backstrap/mathmodel
 
-Then you can extend the MathModel class to create a scene.
+Now you can define a subclass of the MathModel class to create a scene.
 At its simplest, you just need to override the update() method.
 Most methods are chainable where appropriate.
 Here we add a cube with side length 2 and a sphere of diameter 1 to our scene.
@@ -46,11 +51,16 @@ classes to see what methods are available for creating graphic objects.
 At the most basic level, there are the Shape methods surface(), wireframe() and curve().
 The Surface class provides 2D primitives like rect() and disc().
 The Solid class provides 3D solid objects like block(), cone(), and sphere().
-And the Plot class provides some point-set plotting methods -
-point(), listPlot(), curvePlot(), and surfacePlot(),
-and also a text() method for displaying positioned text.
+And the Plot class provides various plotting methods - point() and text(),
+as well as more advanced plots.
 
-Once you've built defined your scene, you'll want to display it!
+You might also like to install and use
+[the "math" NPM package](https://www.npmjs.com/package/@backstrap/math)
+as well, for some useful mathematical functions, but this is entirely optional.
+
+    npm install --save  @backstrap/math
+
+Once you've defined your scene, you'll want to display it.
 A basic HTML page that will display a MathModel looks like this:
 
     <!DOCTYPE html>
