@@ -1,5 +1,5 @@
 /*
- * Simplifed version of @backstrap/mathcell/src/render/threejs-template.js:threejsTemplate()
+ * Simplified version of @backstrap/mathcell/src/render/threejs-template.js:threejsTemplate()
  * Uses a three.js script that has boilerplate code in its renderThree() function.
  */
 export function threejsTemplate(config, lights, texts, points, lines, surfaces, scriptUrl) {
