@@ -13,7 +13,7 @@ export class Plot extends Shape {
      * Draw a text string.
      * @param {string} str - the text to display
      * @param {number[]} vector - position to display the text at
-     * @returns {Geometry[][]}
+     * @returns {Geometry[]}
      */
     text(str, vector) {
         return this.#objectify(text(str, this.transform(vector), this.options()));
@@ -22,7 +22,7 @@ export class Plot extends Shape {
     /**
      * Plot a single point.
      * @param {number[]} vector - position of point to be plotted
-     * @returns {Geometry[][]}
+     * @returns {Geometry[]}
      */
     point(vector) {
         return this.#objectify(point(this.transform(vector), this.options()));
@@ -31,7 +31,7 @@ export class Plot extends Shape {
     /**
      * Plot a list of points.
      * @param {number[][]} points - list of points to be plotted.
-     * @returns {Geometry[][]}
+     * @returns {Geometry[]}
      */
     listPlot(points) {
         return this.#objectify(listPlot(points.map(p => this.transform(p)), this.options()));
@@ -40,7 +40,7 @@ export class Plot extends Shape {
     /**
      * Plot a curve (polyline) from a list of points.
      * @param {number[][]} vertices - list of points on the curve.
-     * @returns {Geometry[][]}
+     * @returns {Geometry[]}
      */
     curvePlot(vertices) {
         return this.#objectify(surfaceFromLines([vertices.map(p => this.transform(p))], this.options()));
@@ -49,7 +49,7 @@ export class Plot extends Shape {
     /**
      * Uses the mathcell surfaceFromLines() function to draw a surface.
      * @param {number[][][]} vertices - 2D array of points to use as a surface mesh
-     * @returns {Geometry[][]}
+     * @returns {Geometry[]}
      */
     surfacePlot(vertices) {
         return this.#objectify(surfaceFromLines(vertices.map(row => row.map(p => this.transform(p))), this.options()));
@@ -57,9 +57,9 @@ export class Plot extends Shape {
 
     /**
      * @param {Object[]} arr
-     * @returns {Geometry[][]}
+     * @returns {Geometry[]}
      */
     #objectify(arr) {
-        return [arr.map(obj => new Geometry(obj))];
+        return arr.map(obj => new Geometry(obj));
     }
 }

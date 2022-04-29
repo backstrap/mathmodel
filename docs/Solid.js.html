@@ -43,7 +43,7 @@ export class Solid extends Shape {
      * @param {number} [w] - width
      * @param {number} [h] - height
      * @param {number} [d] - depth
-     * @returns {Geometry[][]}
+     * @returns {Geometry[]}
      */
     block(w = 1, h = w, d = h) {
         return [
@@ -61,7 +61,7 @@ export class Solid extends Shape {
      *
      * @param [r] - radius
      * @param [h] - height
-     * @returns {Geometry[][]}
+     * @returns {Geometry[]}
      */
     rod(r = 1, h = 1) {
         const surface = new Surface(this);
@@ -75,7 +75,7 @@ export class Solid extends Shape {
      *
      * @param {number} r - radius
      * @param {number} h - height
-     * @returns {Geometry[][]}
+     * @returns {Geometry[]}
      */
     cone(r = 1, h = 1) {
         const surface = new Surface(this);
@@ -87,7 +87,7 @@ export class Solid extends Shape {
      * Generate a sphere with cubic tesselation.
      *
      * @param {number} r - radius
-     * @returns {Geometry[][]}
+     * @returns {Geometry[]}
      */
     sphere(r = 1) {
         const dv = ceiling(this.dv/4);
@@ -109,7 +109,7 @@ export class Solid extends Shape {
      *
      * @param {number} r1 - primary radius
      * @param {number} r2 - secondary radius
-     * @returns {Geometry[][]}
+     * @returns {Geometry[]}
      */
     torus(r1 = 2, r2 = 1) {
         const uvRange = [0, 2*pi, this.dv];

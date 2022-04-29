@@ -11,7 +11,7 @@ export class Surface extends Shape {
     /**
      * @param {number} w - width
      * @param {number} h - height
-     * @returns {Geometry[][]}
+     * @returns {Geometry[]}
      */
     rect(w = 1, h = w) {
         return this.surface((u, v) => [w*u, h*v, 0], [-0.5, 0.5, 1], [-0.5, 0.5, 1]);
@@ -20,7 +20,7 @@ export class Surface extends Shape {
     /**
      * @param {number} w - width
      * @param {number} h - height
-     * @returns {Geometry[][]}
+     * @returns {Geometry[]}
      */
     rightTriangle(w = 1, h = w) {
         return this.surface((u, v) => [w*u*(1 - v), h*v, 0], [0, 1, 1], [0, 1, 1]);
@@ -31,7 +31,7 @@ export class Surface extends Shape {
      *
      * @param {number} n - number of sides
      * @param {number} r - radius of circumscribed circle
-     * @returns {Geometry[][]}
+     * @returns {Geometry[]}
      */
     polygon(n = 5, r = 1) {
         return this.surface(
@@ -48,7 +48,7 @@ export class Surface extends Shape {
      * @param {number} r2 - outer radius
      * @param {number} h - height
      * @param {number} angle - included arc angle
-     * @returns {Geometry[][]}
+     * @returns {Geometry[]}
      */
     conic(r1 = 0, r2 = 1, h = 1, angle = 2*pi) {
         return this.surface(
@@ -67,7 +67,7 @@ export class Surface extends Shape {
      *
      * @param {number} r - radius
      * @param {number} angle - included arc angle
-     * @returns {Geometry[][]}
+     * @returns {Geometry[]}
      */
     disc(r = 1, angle = 2*pi) {
         return this.conic(0, r, 0, angle);
@@ -79,7 +79,7 @@ export class Surface extends Shape {
      * @param {number} r - radius
      * @param {number} h - height
      * @param {number} angle - included arc angle
-     * @returns {Geometry[][]}
+     * @returns {Geometry[]}
      */
     cylinder(r = 1, h = 1, angle = 2*pi) {
         return this.conic(r, r, h, angle);
@@ -89,7 +89,7 @@ export class Surface extends Shape {
      * Generate a hemisphere with cubic tesselation.
      *
      * @param {number} r - radius
-     * @returns {Geometry[][]}
+     * @returns {Geometry[]}
      */
     hemisphere(r = 1) {
         const dv = ceiling(this.dv/4);
@@ -113,7 +113,7 @@ export class Surface extends Shape {
      * @param {number|function(number): number} angle - longitudinal segment size (0 to 2*pi)
      * @param {number} azimuth - latitudinal segment size (0 to pi)
      * @param {number} offset - latitudinal offset (+/-(pi - azimuth)/2)
-     * @returns {Geometry[][]}
+     * @returns {Geometry[]}
      */
     sphereBand(r = 1, angle = 2*pi, azimuth = pi, offset = 0) {
         const getAngle = (typeof angle === 'function' ? angle : (() => angle));

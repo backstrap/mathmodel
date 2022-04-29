@@ -40,7 +40,7 @@ export class Shape extends Graphable {
      * Draw a parametric curve.
      * @param {function(number): number[]} f - parametric function
      * @param {number[]} u - parametric coordinate range
-     * @returns {Geometry[][]}
+     * @returns {Geometry[]}
      */
     curve(f, u) {
         return this.#objectify(parametric((s) => this.transform(f(s)), u, this.options()));
@@ -51,7 +51,7 @@ export class Shape extends Graphable {
      * @param {function(number, number): number[]} f - parametric function
      * @param {number[]} u - first parametric coordinate range
      * @param {number[]} v - second parametric coordinate range
-     * @returns {Geometry[][]}
+     * @returns {Geometry[]}
      */
     wireframe(f, u, v) {
         return this.#objectify(wireframe((s, t) => this.transform(f(s, t)), u, v, this.options()));
@@ -62,7 +62,7 @@ export class Shape extends Graphable {
      * @param {function(number, number): number[]} f - parametric function
      * @param {number[]} u - first parametric coordinate range
      * @param {number[]} v - second parametric coordinate range
-     * @returns {Geometry[][]}
+     * @returns {Geometry[]}
      */
     surface(f, u, v) {
         const mapper = (this.#style === 'wireframe' ? wireframe : parametric);
@@ -71,9 +71,9 @@ export class Shape extends Graphable {
 
     /**
      * @param {Object[]} arr
-     * @returns {Geometry[][]}
+     * @returns {Geometry[]}
      */
     #objectify(arr) {
-        return [arr.map(obj => new Geometry(obj))];
+        return arr.map(obj => new Geometry(obj));
     }
 }
