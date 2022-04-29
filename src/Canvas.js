@@ -22,7 +22,7 @@ export class Canvas {
     /** @member {string} */
     #id;
 
-    /** @member {Geometry[]} */
+    /** @member {Geometry[][]} */
     #data = [];
 
     /** @member {renderConfig} */
@@ -63,11 +63,11 @@ export class Canvas {
 
     /**
      * Add graphics object to the buffer.
-     * @param {Geometry[]} objs
+     * @param {Geometry[][]} objs
      * @returns {this}
      */
-    add(...objs) {
-        objs.forEach(obj => this.#data = this.#data.concat(obj));
+    add(objs) {
+        this.#data = this.#data.concat(objs);
         return this;
     }
 
@@ -94,7 +94,7 @@ export class Canvas {
      * Code based on @backstrap/mathcell/src/core.js:evaluate()
      *
      * @param {string} id - the id of a document element
-     * @param {Object} data - data to be rendered
+     * @param {Geometry[][]|Geometry[][][]} data - data to be rendered
      * @param {renderConfig} config - a rendering configuration
      */
     #evaluate(id, data, config) {
