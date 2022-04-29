@@ -50,11 +50,7 @@ Paul Masson's <a href="https://paulmasson.github.io/mathcell/">MathCell</a> pack
 and the <a href="https://threejs.org/">Three.js</a> render engine.
 It also makes use of Paul Masson's <a href="https://paulmasson.github.io/math/">&quot;math&quot;</a>
 package of mathematical functions.</p>
-<p>MathModel is built on top of
-the excellent mathcell and math packages by Paul Masson (refs needed).
-It provides a very simple, straightforward, yet powerful
-3D graphics drawing API.</p>
-<p>MathModel provides a simple, fluent, and object-oriented API for drawing 3D graphics.</p>
+<p>It provides a simple, fluent, and object-oriented API for drawing 3D graphics.</p>
 <h3>API documentation</h3>
 <p>API documentation is included in the NPM package in the &quot;/docs&quot; folder,
 and published on <a href="https://backstrap.github.io/mathmodel/">GitHub Pages</a>.</p>
@@ -88,6 +84,30 @@ The Surface class provides 2D primitives like rect() and disc().
 The Solid class provides 3D solid objects like block(), cone(), and sphere().
 And the Plot class provides various plotting methods - point() and text(),
 as well as more advanced plots.</p>
+<p>All the above graphic object classes are subclasses of
+<a href="Coords.html">Coords</a>,
+which defines a local coordinate system transformation matrix
+and standard transformation methods (translate, rotate, scale, stretch, quaternion.)
+Thus you can easily transform objects, for example:</p>
+<pre><code>new Solid().rotate(pi/4).stretch(2, 3, 4).block();
+</code></pre>
+<p>Scenes can also be animated by setting the 'animate' property of your MathModel config
+and then setting the rotationAxisAngle (and optionally rotationOrigin) options
+of the shapes that are to be animated (rotation is the only animation currently supported.)</p>
+<p>The <a href="GroupedShape.html">GroupedShape</a> class
+can be used to group elements together into logic objects.
+Grouped objects will be animated as a single entity.</p>
+<pre><code>class MyPart extends GroupedShape {
+    // Returns a simple spinning shape composed of two squares.
+    get() {
+        const surface = new Surface(this.setOptions({rotationAxisAngle: [[1, 0, 0], 1]}));
+         
+        return surface.rect().concat(
+            surface.rotate(pi/2).rect()
+        );
+    }
+}
+</code></pre>
 <p>You might also like to install and use
 <a href="https://www.npmjs.com/package/@backstrap/math">the &quot;math&quot; NPM package</a>
 as well, for some useful mathematical functions, but this is entirely optional.</p>

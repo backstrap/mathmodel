@@ -2,7 +2,7 @@
   "name": "@backstrap/mathmodel",
   "version": "1.2.2",
   "description": "3D modeling and display package built on MathCell and Three",
-  "homepage": "https://github.com/backstrap/mathmodel/",
+  "homepage": "https://backstrap.github.io/mathmodel/",
   "author": "Kevin Perry perry@princeton.edu",
   "license": "MIT",
   "main": "src/index.js",
@@ -22,10 +22,7 @@
     "test": "rm -rf coverage/* && jest",
     "watchtest": "rm -rf coverage/* && jest --watchAll"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/backstrap/mathmodel"
-  },
+  "repository": "github:backstrap/mathmodel",
   "dependencies": {
     "@backstrap/math": "^1.4.9-a",
     "@backstrap/mathcell": "^1.9.3-a",

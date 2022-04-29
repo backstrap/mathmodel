@@ -8,12 +8,7 @@ and the [Three.js](https://threejs.org/) render engine.
 It also makes use of Paul Masson's ["math"](https://paulmasson.github.io/math/)
 package of mathematical functions.
 
-MathModel is built on top of
-the excellent mathcell and math packages by Paul Masson (refs needed).
-It provides a very simple, straightforward, yet powerful
-3D graphics drawing API.
-
-MathModel provides a simple, fluent, and object-oriented API for drawing 3D graphics.
+It provides a simple, fluent, and object-oriented API for drawing 3D graphics.
 
 ### API documentation
 
@@ -53,6 +48,33 @@ The Surface class provides 2D primitives like rect() and disc().
 The Solid class provides 3D solid objects like block(), cone(), and sphere().
 And the Plot class provides various plotting methods - point() and text(),
 as well as more advanced plots.
+
+All the above graphic object classes are subclasses of
+<a href="Coords.html">Coords</a>,
+which defines a local coordinate system transformation matrix
+and standard transformation methods (translate, rotate, scale, stretch, quaternion.)
+Thus you can easily transform objects, for example:
+
+    new Solid().rotate(pi/4).stretch(2, 3, 4).block();
+
+Scenes can also be animated by setting the 'animate' property of your MathModel config
+and then setting the rotationAxisAngle (and optionally rotationOrigin) options
+of the shapes that are to be animated (rotation is the only animation currently supported.)
+
+The <a href="GroupedShape.html">GroupedShape</a> class
+can be used to group elements together into logic objects.
+Grouped objects will be animated as a single entity.
+
+    class MyPart extends GroupedShape {
+        // Returns a simple spinning shape composed of two squares.
+        get() {
+            const surface = new Surface(this.setOptions({rotationAxisAngle: [[1, 0, 0], 1]}));
+             
+            return surface.rect().concat(
+                surface.rotate(pi/2).rect()
+            );
+        }
+    }
 
 You might also like to install and use
 [the "math" NPM package](https://www.npmjs.com/package/@backstrap/math)
