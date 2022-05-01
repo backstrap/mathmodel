@@ -1,6 +1,6 @@
 // noinspection JSUnusedGlobalSymbols
 
-import {MathCell, generateId, getVariable} from '@backstrap/mathcell';
+import {MathCell, generateId, getVariable, checkLimits} from '@backstrap/mathcell';
 import {Canvas} from './Canvas';
 
 /**
@@ -73,6 +73,9 @@ export class MathModel {
      * @param {Object} classMap - an object which maps id's to Classes
      */
     static loadMathCells(document, classMap) {
+        // For input onchange events
+        window.checkLimits = checkLimits;
+
         window.addEventListener('load', () => {
             for (const cell of document.getElementsByClassName('mathcell')) {
                 /** @type {function(string=)} */
