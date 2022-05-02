@@ -112,9 +112,14 @@ export class MathModel {
         this.canvas = new Canvas(id, this.config);
         MathCell(id, this.inputs);
         node.update = (id => {
-            this.canvas.clear();
-            this.update(this.#getValues(id, this.inputs));
-            this.canvas.show();
+            try {
+                this.canvas.clear();
+                this.update(this.#getValues(id, this.inputs));
+                this.canvas.show();
+            } catch (e) {
+                document.getElementById(id + 'output').innerHTML = e.toString();
+                throw e;
+            }
         });
         node.update(id);
     }

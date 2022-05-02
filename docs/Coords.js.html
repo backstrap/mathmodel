@@ -107,8 +107,8 @@ export class Coords {
         const r = identity(4);
 
         if (axis.length) {
-            const r = sqrt(axis[0]**2 + axis[1]**2 + axis[2]**2);
-            const x = axis[0]/r, y = axis[1]/r, z = axis[2]/r;
+            const n = sqrt(axis[0]**2 + axis[1]**2 + axis[2]**2);
+            const x = axis[0]/n, y = axis[1]/n, z = axis[2]/n;
             const c = cos(angle), s = sin(angle);
             r[0] = [c + (1 - c)*x**2, x*y*(1 - c) - z*s, x*z*(1 - c) + y*s, 0];
             r[1] = [x*y*(1 - c) + z*s, c + (1 - c)*y**2, y*z*(1 - c) - x*s, 0];
