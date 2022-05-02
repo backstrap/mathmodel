@@ -1,4 +1,6 @@
-import {sqrt, sin, cos, identity, matrixMul} from '@backstrap/math';
+// noinspection JSUnusedGlobalSymbols
+
+import {sqrt, sin, cos, arcsin, identity, matrixMul} from '@backstrap/math';
 
 /**
  * Compose two matrices (with null arg equivalent to identity matrix)
@@ -93,6 +95,23 @@ export class Coords {
         }
 
         this.#matrix = compose(this.#matrix, r);
+        return this;
+    }
+
+    /**
+     * Rotate so that srcAxis goes into dstAxis.
+     * @param {number[]} [srcAxis]
+     * @param {number[]} [dstAxis]
+     */
+    rotateTo(srcAxis, dstAxis) {
+        const norm = ([x, y, z]) => sqrt(x*x + y*y + z*z);
+        const cross = ([a1, a2, a3], [b1, b2, b3]) => [a2*b3 - a3*b2, a3*b1 - a1*b3, a1*b2 - a2*b1];
+        const r = cross(srcAxis, dstAxis);
+
+        if (norm(r) > 0 && !isNaN(r[0] + r[1] + r[2])) {
+            const a = arcsin(norm(r) / norm(dstAxis));
+            this.rotate(a, r);
+        }
         return this;
     }
 
