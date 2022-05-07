@@ -25,7 +25,7 @@ export function threejsTemplate(config, lights, texts, points, lines, surfaces, 
       const points = ${points};
       const lines = ${lines};
       const surfaces = ${surfaces};
-      renderThree();
+      renderThree(config, lights, texts, points, lines, surfaces);
     </script>
   </body>
 </html>`;

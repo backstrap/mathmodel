@@ -53,7 +53,7 @@ All the above graphic object classes are subclasses of
 <a href="Coords.html">Coords</a>,
 which defines a local coordinate system transformation matrix
 and standard transformation methods (translate, rotate, scale, stretch, quaternion.)
-Thus you can easily transform objects, for example:
+Thus, you can easily transform objects, for example:
 
     new Solid().rotate(pi/4).stretch(2, 3, 4).block();
 

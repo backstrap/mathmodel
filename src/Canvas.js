@@ -1,3 +1,4 @@
+import {exportSTL} from './exportSTL';
 import {threejsGraphic} from './threejsGraphic';
 
 /* IOSFix() code taken from @backstrap/mathcell/src/core.js */
@@ -87,6 +88,14 @@ export class Canvas {
     show() {
         this.#evaluate(this.#id, this.#data, this.#config);
         return this;
+    }
+
+    /**
+     * Create STL format string from current geometry data.
+     * @returns {string}
+     */
+    export() {
+        return exportSTL(this.#data, this.#config);
     }
 
     // noinspection JSMethodCanBeStatic

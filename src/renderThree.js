@@ -1,7 +1,8 @@
-// noinspection JSUnusedAssignment,CommaExpressionJS,JSUnresolvedVariable,RedundantConditionalExpressionJS,ES6ConvertVarToLetConst,JSDeprecatedSymbols,JSDuplicatedDeclaration,JSUnresolvedFunction
+// noinspection DuplicatedCode
 
 import * as THREE from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
+import {addPoint, addLine, addSurface} from './threejsScene';
 
 /**
  * The body of the renderThree() function is essentially
@@ -9,21 +10,22 @@ import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
  * created by @backstrap/mathcell/src/render/threejs-template.js:threejsTemplate()
  * It is used in the template created by mathmodel's threejsTemplate() function.
  */
-window.renderThree = function renderThree() {
+if (typeof window !== 'undefined') {
+window.renderThree = function renderThree(config, lights, texts, points, lines, surfaces) {
 
-var scene = new THREE.Scene();
+const scene = new THREE.Scene();
 
-var renderer = new THREE.WebGLRenderer( { antialias: true } );
+const renderer = new THREE.WebGLRenderer( { antialias: true } );
 renderer.setPixelRatio( window.devicePixelRatio );
 renderer.setSize( window.innerWidth, window.innerHeight );
 renderer.setClearColor( config.clearColor, 1 );
 document.body.appendChild( renderer.domElement );
 
-var a = config.aspectRatio; // aspect multipliers
-var animate = config.animate;
+const a = config.aspectRatio; // aspect multipliers
+let animate = config.animate;
 
-var xMin = config.xMin, yMin = config.yMin, zMin = config.zMin;
-var xMax = config.xMax, yMax = config.yMax, zMax = config.zMax;
+let xMin = config.xMin, yMin = config.yMin, zMin = config.zMin;
+let xMax = config.xMax, yMax = config.yMax, zMax = config.zMax;
 
 if ( xMin === xMax ) { xMin -= 1; xMax += 1; }
 if ( yMin === yMax ) { yMin -= 1; yMax += 1; }
@@ -33,10 +35,10 @@ if ( zMin === zMax ) { zMin -= 1; zMax += 1; }
 xMin *= a[0]; yMin *= a[1]; zMin *= a[2];
 xMax *= a[0]; yMax *= a[1]; zMax *= a[2];
 
-var xRange = xMax - xMin;
-var yRange = yMax - yMin;
-var zRange = zMax - zMin;
-var rRange = Math.sqrt( xRange*xRange + yRange*yRange );
+const xRange = xMax - xMin;
+const yRange = yMax - yMin;
+let zRange = zMax - zMin;
+const rRange = Math.sqrt( xRange*xRange + yRange*yRange );
 
 if ( zRange > rRange && a[2] === 1 && !config.equalAspect ) {
   a[2] = rRange / zRange;
@@ -50,36 +52,36 @@ window.yMid = ( yMin + yMax ) / 2;
 window.zMid = ( zMin + zMax ) / 2;
 
 if ( config.frame ) {
-  var vertices = [ xMin, yMin, zMin, xMax, yMax, zMax ];
-  var box = new THREE.BufferGeometry();
+  const vertices = [ xMin, yMin, zMin, xMax, yMax, zMax ];
+  const box = new THREE.BufferGeometry();
   box.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
-  var boxMesh = new THREE.Line( box );
+  const boxMesh = new THREE.Line( box );
   scene.add( new THREE.BoxHelper( boxMesh, 'black' ) );
 }
 
 if ( config.axesLabels ) {
 
-  var d = config.decimals; // decimals
-  var offsetRatio = .1;
-  var al = config.axesLabels;
+  const d = config.decimals; // decimals
+  const offsetRatio = .1;
+  const al = config.axesLabels;
 
-  var offset = offsetRatio * ( yMax - yMin );
-  var xm = ( xMid/a[0] ).toFixed(d);
-  if ( /^-0.?0*$/.test(xm) ) xm = xm.substr(1);
+  let offset = offsetRatio * ( yMax - yMin );
+  let xm = ( xMid/a[0] ).toFixed(d);
+  if ( /^-0.?0*$/.test(xm) ) xm = xm.substring(1);
   addLabel( al[0] + '=' + xm, xMid, yMax+offset, zMin );
   addLabel( ( xMin/a[0] ).toFixed(d), xMin, yMax+offset, zMin );
   addLabel( ( xMax/a[0] ).toFixed(d), xMax, yMax+offset, zMin );
 
-  var offset = offsetRatio * ( xMax - xMin );
-  var ym = ( yMid/a[1] ).toFixed(d);
-  if ( /^-0.?0*$/.test(ym) ) ym = ym.substr(1);
+  offset = offsetRatio * ( xMax - xMin );
+  let ym = ( yMid/a[1] ).toFixed(d);
+  if ( /^-0.?0*$/.test(ym) ) ym = ym.substring(1);
   addLabel( al[1] + '=' + ym, xMax+offset, yMid, zMin );
   addLabel( ( yMin/a[1] ).toFixed(d), xMax+offset, yMin, zMin );
   addLabel( ( yMax/a[1] ).toFixed(d), xMax+offset, yMax, zMin );
 
-  var offset = offsetRatio * ( yMax - yMin );
-  var zm = ( zMid/a[2] ).toFixed(d);
-  if ( /^-0.?0*$/.test(zm) ) zm = zm.substr(1);
+  offset = offsetRatio * ( yMax - yMin );
+  let zm = ( zMid/a[2] ).toFixed(d);
+  if ( /^-0.?0*$/.test(zm) ) zm = zm.substring(1);
   addLabel( al[2] + '=' + zm, xMax, yMin-offset, zMid );
   addLabel( ( zMin/a[2] ).toFixed(d), xMax, yMin-offset, zMin );
   addLabel( ( zMax/a[2] ).toFixed(d), xMax, yMin-offset, zMax );
@@ -88,14 +90,14 @@ if ( config.axesLabels ) {
 
 function addLabel( text, x, y, z, color='black', fontsize=14 ) {
 
-  var canvas = document.createElement( 'canvas' );
-  var pixelRatio = Math.round( window.devicePixelRatio );
+  const canvas = document.createElement( 'canvas' );
+  const pixelRatio = Math.round( window.devicePixelRatio );
   canvas.width = 128 * pixelRatio;
   canvas.height = 32 * pixelRatio; // powers of two
   canvas.style.width = '128px';
   canvas.style.height = '32px';
 
-  var context = canvas.getContext( '2d' );
+  const context = canvas.getContext( '2d' );
   context.scale( pixelRatio, pixelRatio );
   context.fillStyle = color;
   context.font = fontsize + 'px monospace';
@@ -103,10 +105,10 @@ function addLabel( text, x, y, z, color='black', fontsize=14 ) {
   context.textBaseline = 'middle';
   context.fillText( text, canvas.width/2/pixelRatio, canvas.height/2/pixelRatio );
 
-  var texture = new THREE.Texture( canvas );
+  const texture = new THREE.Texture( canvas );
   texture.needsUpdate = true;
 
-  var sprite = new THREE.Sprite( new THREE.SpriteMaterial( { map: texture, sizeAttenuation: false } ) );
+  const sprite = new THREE.Sprite( new THREE.SpriteMaterial( { map: texture, sizeAttenuation: false } ) );
   sprite.position.set( x, y, z );
   sprite.scale.set( 1/4, 1/16, 1 ); // ratio of width to height plus scaling
   scene.add( sprite );
@@ -122,21 +124,22 @@ camera.up.set( 0, 0, 1 );
 
 // default auto position, followed by rotation to viewpoint direction
 camera.position.set( xMid, yMid, zMid );
-var defaultOffset = new THREE.Vector3( xRange, yRange, zRange );
+const defaultOffset = new THREE.Vector3( xRange, yRange, zRange );
 
 if ( config.viewpoint !== 'auto' ) {
-  var v = config.viewpoint;
-  var t = new THREE.Vector3( v[0], v[1], v[2] );
-  var phi = defaultOffset.angleTo( t );
-  var n = t.cross( defaultOffset ).normalize();
+  const v = config.viewpoint;
+  const t = new THREE.Vector3( v[0], v[1], v[2] );
+  const phi = defaultOffset.angleTo( t );
+  const n = t.cross( defaultOffset ).normalize();
   defaultOffset.applyAxisAngle( n, -phi );
 }
 
-camera.position.add( defaultOffset );
+// noinspection JSUnresolvedFunction
+  camera.position.add( defaultOffset );
 
-for ( var i = 0 ; i < lights.length ; i++ ) {
-  var light = new THREE.DirectionalLight( lights[i].color, 1 );
-  var v = lights[i].position;
+for ( let i = 0 ; i < lights.length ; i++ ) {
+  const light = new THREE.DirectionalLight( lights[i].color, 1 );
+  const v = lights[i].position;
   light.position.set( a[0]*v[0], a[1]*v[1], a[2]*v[2] );
   if ( lights[i].parent === 'camera' ) {
     light.target.position.set( xMid, yMid, zMid );
@@ -148,7 +151,7 @@ scene.add( camera );
 
 scene.add( new THREE.AmbientLight( config.ambientLight, 1 ) );
 
-var controls = new OrbitControls( camera, renderer.domElement );
+const controls = new OrbitControls( camera, renderer.domElement );
 controls.target.set( xMid, yMid, zMid );
 controls.addEventListener( 'change', function() { if ( !animate ) render(); } );
 
@@ -169,7 +172,7 @@ window.addEventListener( 'touchstart', suspendAnimation );
 window.addEventListener( 'touchmove', suspendAnimation );
 window.addEventListener( 'touchend', suspendAnimation );
 
-var suspendTimer;
+let suspendTimer;
 
 function suspendAnimation() {
   clearInterval( suspendTimer );
@@ -177,51 +180,16 @@ function suspendAnimation() {
   suspendTimer = setTimeout( function() { if ( config.animate ) { animate = true; render(); } }, 5000 );
 }
 
-for ( var i = 0 ; i < texts.length ; i++ ) {
-  var t = texts[i];
+for ( let i = 0 ; i < texts.length ; i++ ) {
+  const t = texts[i];
   addLabel( t.text, t.point[0], t.point[1], t.point[2], t.options.color, t.options.fontSize );
 }
 
-for ( var i = 0 ; i < points.length ; i++ ) addPoint( points[i] );
+for ( let i = 0 ; i < points.length ; i++ ) addPoint( scene, points[i], a );
 
-function addPoint( p ) {
+let newLines = [], tempPoints = [];
 
-  var v = p.point;
-  var vertices = [ a[0]*v[0], a[1]*v[1], a[2]*v[2] ];
-  var geometry = new THREE.BufferGeometry();
-  geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
-
-  var canvas = document.createElement( 'canvas' );
-  canvas.width = 128;
-  canvas.height = 128;
-
-  var context = canvas.getContext( '2d' );
-  context.arc( 64, 64, 64, 0, 2 * Math.PI );
-  context.fillStyle = p.options.color;
-  context.fill();
-
-  var texture = new THREE.Texture( canvas );
-  texture.needsUpdate = true;
-
-  var transparent = p.options.opacity < 1 ? true : false;
-  var material = new THREE.PointsMaterial( { size: p.options.size/20, map: texture,
-                                             transparent: transparent, opacity: p.options.opacity,
-                                             alphaTest: .1 } );
-
-  var c = new THREE.Vector3();
-  geometry.computeBoundingBox();
-  geometry.boundingBox.getCenter( c );
-  geometry.translate( -c.x, -c.y, -c.z );
-
-  var mesh = new THREE.Points( geometry, material );
-  mesh.position.set( c.x, c.y, c.z );
-  scene.add( mesh );
-
-}
-
-var newLines = [], tempPoints = [];
-
-for ( var i = 0 ; i < lines.length ; i++ ) {
+for ( let i = 0 ; i < lines.length ; i++ ) {
 
   lines[i].points.forEach( v => {
     // apply aspect multipliers for convenience
@@ -233,15 +201,15 @@ for ( var i = 0 ; i < lines.length ; i++ ) {
   } );
 
   // split lines at empty points
-  for ( var j = 0 ; j < lines[i].points.length ; j++ )
+  for ( let j = 0 ; j < lines[i].points.length ; j++ )
     if ( lines[i].points[j].length === 0 ) {
       tempPoints = lines[i].points.splice( j );
       if ( j === 0 ) lines[i].points = [[0,0,0]]; // dummy line for options
     }
 
-  var l = [];
-  for ( var j = 0 ; j < tempPoints.length ; j++ ) {
-    var p = tempPoints[j];
+  let l = [];
+  for ( let j = 0 ; j < tempPoints.length ; j++ ) {
+    const p = tempPoints[j];
     if ( p.length > 0 ) l.push( p );
     else if ( l.length > 0 ) {
       newLines.push( { points: l, options: lines[i].options } );
@@ -253,170 +221,16 @@ for ( var i = 0 ; i < lines.length ; i++ ) {
 }
 
 newLines.forEach( l => lines.push( l ) );
-newLines = [], tempPoints = [];
 
-for ( var i = 0 ; i < lines.length ; i++ ) addLine( lines[i] );
+for ( let i = 0 ; i < lines.length ; i++ ) addLine( scene, lines[i] );
 
-function addLine( l ) {
-
-  var vertices = [];
-  for ( var i = 0 ; i < l.points.length ; i++ ) {
-    var v = l.points[i];
-    vertices.push( v[0], v[1], v[2] );
-  }
-
-  var geometry = new THREE.BufferGeometry();
-  geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
-
-  var transparent = l.options.opacity < 1 ? true : false;
-  var material = new THREE.LineBasicMaterial( { color: l.options.color, linewidth: l.options.linewidth,
-                                                transparent: transparent, opacity: l.options.opacity } );
-
-  var c = new THREE.Vector3();
-  geometry.computeBoundingBox();
-  geometry.boundingBox.getCenter( c );
-  geometry.translate( -c.x, -c.y, -c.z );
-
-  var mesh = l.options.useLineSegments ? new THREE.LineSegments( geometry, material )
-                                       : new THREE.Line( geometry, material );
-  mesh.position.set( c.x, c.y, c.z );
-  scene.add( mesh );
-
-}
-
-for ( var i = 0 ; i < surfaces.length ; i++ ) addSurface( surfaces[i] );
-
-function addSurface( s ) {
-
-  // apply aspect multipliers for convenience
-  s.vertices.forEach( v => { v[0] *= a[0]; v[1] *= a[1]; v[2] *= a[2]; } );
-
-  var badVertices = [];
-
-  // remove faces completely outside vertical range or containing NaN
-  for ( var i = s.faces.length - 1 ; i >= 0 ; i-- ) {
-    var f = s.faces[i];
-
-    if ( f.every( index => s.vertices[index][2] < zMin ) ) s.faces.splice( i, 1 );
-    if ( f.every( index => s.vertices[index][2] > zMax ) ) s.faces.splice( i, 1 );
-
-    var check = false;
-    f.forEach( index => {
-      if ( isNaN( s.vertices[index][2] ) ) {
-        if ( !badVertices.includes( index ) ) badVertices.push( index );
-        check = true;
-      } } );
-    if ( check ) s.faces.splice( i, 1 );
-  }
-
-  // set bad vertices to dummy value
-  badVertices.forEach( index => s.vertices[index][2] = 0 );
-
-  // constrain vertices to vertical range
-  for ( var i = 0 ; i < s.vertices.length ; i++ ) {
-    if ( s.vertices[i][2] < zMin ) s.vertices[i][2] = zMin;
-    if ( s.vertices[i][2] > zMax ) s.vertices[i][2] = zMax;
-  }
-
-  var indices = [];
-  for ( var i = 0 ; i < s.faces.length ; i++ ) {
-    var f = s.faces[i];
-    for ( var j = 0 ; j < f.length - 2 ; j++ )
-      indices.push( f[0], f[j+1], f[j+2] );
-  }
-
-  var geometry = new THREE.BufferGeometry();
-  geometry.setIndex( indices );
-  geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( s.vertices.flat(), 3 ) );
-  geometry.computeVertexNormals();
-
-  var side = s.options.singleSide ? THREE.FrontSide : THREE.DoubleSide;
-  var transparent = s.options.opacity < 1 ? true : false;
-  var material;
-
-  switch ( s.options.material ) {
-
-    case 'normal':
-
-      material = new THREE.MeshNormalMaterial( { side: THREE.DoubleSide } );
-      break;
-
-    case 'standard':
-
-      material = new THREE.MeshStandardMaterial( {
-                               color: s.options.color, side: side,
-                               transparent: transparent, opacity: s.options.opacity,
-                               metalness: .5, roughness: .5 } );
-      break;
-
-    case 'phong':
-    default:
-
-      material = new THREE.MeshPhongMaterial( {
-                               color: s.options.color, side: side,
-                               transparent: transparent, opacity: s.options.opacity,
-                               shininess: 20 } );
-
-  }
-
-  if ( 'colors' in s.options ) {
-    var colors = [];
-    for ( var i = 0 ; i < s.options.colors.length ; i++ ) {
-      var c = s.options.colors[i];
-      colors.push( c.r, c.g, c.b );
-    }
-    geometry.setAttribute( 'color', new THREE.Float32BufferAttribute( colors, 3 ) );
-    material.vertexColors = THREE.VertexColors;
-    material.color.set( 'white' ); // crucial!
-  }
-
-  var c = new THREE.Vector3();
-  geometry.computeBoundingBox();
-  geometry.boundingBox.getCenter( c );
-  geometry.translate( -c.x, -c.y, -c.z );
-
-  var mesh = new THREE.Mesh( geometry, material );
-  mesh.position.set( c.x, c.y, c.z );
-  if ( s.options.renderOrder ) mesh.renderOrder = s.options.renderOrder;
-  if ( s.options.rotationAxisAngle ) {
-    mesh.userData.rotateOnAxis = true;
-    var v = s.options.rotationAxisAngle[0];
-    mesh.userData.axis = new THREE.Vector3( v[0], v[1], v[2] ).normalize();
-    mesh.userData.angle = s.options.rotationAxisAngle[1];
-  }
-
-  if ( 'group' in s.options ) {
-
-    var group = scene.getObjectByName( s.options.group );
-    if ( !group ) {
-      group = new THREE.Group();
-      group.name = s.options.group;
-      scene.add( group );
-    }
-    mesh.position.sub(group.position);
-    group.add( mesh );
-
-    if ( mesh.userData.rotateOnAxis ) {
-      mesh.userData.rotateOnAxis = false;
-      group.userData.rotateOnAxis = true;
-      group.userData.axis = mesh.userData.axis;
-      group.userData.angle = mesh.userData.angle;
-
-      if (s.options.rotationOrigin) {
-        const shift = (new THREE.Vector3(...s.options.rotationOrigin)).sub(group.position);
-        group.traverse(obj => obj.position[obj === group ? 'add' : 'sub'](shift));
-      }
-    }
-
-  } else scene.add( mesh );
-
-}
+for ( let i = 0 ; i < surfaces.length ; i++ ) addSurface( scene, surfaces[i], a, zMin, zMax );
 
 if ( config.clippingPlane ) {
 
-  var v = config.clippingPlane[0];
-  var d = config.clippingPlane[1];
-  var plane = new THREE.Plane( new THREE.Vector3(v[0],v[1],v[2]).normalize(), d );
+  const v = config.clippingPlane[0];
+  const d = config.clippingPlane[1];
+  const plane = new THREE.Plane( new THREE.Vector3(v[0],v[1],v[2]).normalize(), d );
   renderer.clippingPlanes = [ plane ];
 
 }
@@ -440,4 +254,5 @@ controls.update();
 if ( !animate ) render();
 
 };
+}
 

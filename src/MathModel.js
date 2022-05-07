@@ -134,6 +134,14 @@ export class MathModel {
     }
 
     /**
+     * Create STL format string from current geometry data.
+     * @returns {string}
+     */
+    export() {
+        return this.canvas.export();
+    }
+
+    /**
      * Modify the rendering configuration
      * @param {renderConfig} config - the parameters to be updated
      */
