@@ -33,6 +33,7 @@ export function addPoint(scene, p, a)
 
   const mesh = new THREE.Points( geometry, material );
   mesh.position.set( c.x, c.y, c.z );
+  mesh.updateMatrixWorld();
   scene.add( mesh );
 
 }
@@ -60,6 +61,7 @@ export function addLine(scene, l)
   const mesh = l.options.useLineSegments ? new THREE.LineSegments( geometry, material )
                                        : new THREE.Line( geometry, material );
   mesh.position.set( c.x, c.y, c.z );
+  mesh.updateMatrixWorld();
   scene.add( mesh );
 
 }
@@ -156,6 +158,7 @@ export function addSurface(scene, s, a, zMin, zMax)
 
   const mesh = new THREE.Mesh( geometry, material );
   mesh.position.set( c.x, c.y, c.z );
+  mesh.updateMatrixWorld();
   if ( s.options.renderOrder ) mesh.renderOrder = s.options.renderOrder;
   // noinspection JSUnresolvedVariable
   if ( s.options.rotationAxisAngle ) {
@@ -189,6 +192,7 @@ export function addSurface(scene, s, a, zMin, zMax)
         // noinspection JSUnresolvedVariable
         const shift = (new THREE.Vector3(...s.options.rotationOrigin)).sub(group.position);
         group.traverse(obj => obj.position[obj === group ? 'add' : 'sub'](shift));
+        group.updateMatrixWorld();
       }
     }
   } else {
