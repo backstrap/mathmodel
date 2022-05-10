@@ -89,16 +89,17 @@ export class Surface extends Shape {
      * Generate a hemisphere with cubic tesselation.
      *
      * @param {number} r - radius
+     * @param {boolean} [rev] - reverse orientation (normal pointing inward)
      * @returns {Geometry[]}
      */
-    hemisphere(r = 1) {
+    hemisphere(r = 1, rev) {
         const dv = ceiling(this.dv/4);
         const sRange = [-0.5, 0.5, dv];
-        const tRange = [0, 0.5, dv];
+        const tRange = [rev ? 0.5 : 0, rev ? 0 : 0.5, dv];
         const dist = (u, v) => r/sqrt(u*u + v*v + 0.25);
 
         return [
-            this.surface((u, v) => (p => [ u*p,  v*p, p/2])(dist(u, v)), sRange, sRange),
+            this.surface((u, v) => (p => [ u*p,  v*p, p/2])(dist(u, v)), sRange, rev ? [0.5, -0.5, dv] : sRange),
             this.surface((u, v) => (p => [ p/2,  u*p, v*p])(dist(u, v)), sRange, tRange),
             this.surface((u, v) => (p => [ u*p, -p/2, v*p])(dist(u, v)), sRange, tRange),
             this.surface((u, v) => (p => [-p/2, -u*p, v*p])(dist(u, v)), sRange, tRange),
@@ -113,9 +114,10 @@ export class Surface extends Shape {
      * @param {number|function(number): number} angle - longitudinal segment size (0 to 2*pi)
      * @param {number} azimuth - latitudinal segment size (0 to pi)
      * @param {number} offset - latitudinal offset (+/-(pi - azimuth)/2)
+     * @param {boolean} rev - reverse orientation (normal pointing inward)
      * @returns {Geometry[]}
      */
-    sphereBand(r = 1, angle = 2*pi, azimuth = pi, offset = 0) {
+    sphereBand(r = 1, angle = 2*pi, azimuth = pi, offset = 0, rev) {
         const getAngle = (typeof angle === 'function' ? angle : (() => angle));
         return this.surface(
             (u, v) => [
@@ -124,7 +126,7 @@ export class Surface extends Shape {
                 r*sin(azimuth*v + offset)
             ],
             [-0.5, 0.5, 2*ceiling(this.dv*getAngle(0)/(2*pi))],
-            [-0.5, 0.5, 2*ceiling(this.dv*azimuth/(2*pi))]
+            [rev ? 0.5 : -0.5, rev ? -0.5 : 0.5, 2*ceiling(this.dv*azimuth/(2*pi))]
         );
     }
 }
