@@ -31,8 +31,8 @@ export class Solid extends Shape {
     /**
      * Generate a rod (a solid cylinder, with ends.)
      *
-     * @param [r] - radius
-     * @param [h] - height
+     * @param {number} [r] - radius
+     * @param {number} [h] - height
      * @returns {Geometry[]}
      */
     rod(r = 1, h = 1) {
@@ -45,8 +45,8 @@ export class Solid extends Shape {
     /**
      * Generate a solid cone.
      *
-     * @param {number} r - radius
-     * @param {number} h - height
+     * @param {number} [r] - radius
+     * @param {number} [h] - height
      * @returns {Geometry[]}
      */
     cone(r = 1, h = 1) {
@@ -58,7 +58,7 @@ export class Solid extends Shape {
     /**
      * Generate a sphere with cubic tesselation.
      *
-     * @param {number} r - radius
+     * @param {number} [r] - radius
      * @returns {Geometry[]}
      */
     sphere(r = 1) {
@@ -79,8 +79,8 @@ export class Solid extends Shape {
     /**
      * Generate a regular torus.
      *
-     * @param {number} r1 - primary radius
-     * @param {number} r2 - secondary radius
+     * @param {number} [r1] - primary radius
+     * @param {number} [r2] - secondary radius
      * @returns {Geometry[]}
      */
     torus(r1 = 2, r2 = 1) {

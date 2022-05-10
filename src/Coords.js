@@ -26,7 +26,7 @@ export class Coords {
     dv = 100;
 
     /**
-     * @param {Coords} parent
+     * @param {Coords} [parent]
      */
     constructor(parent = null) {
         this.#matrix = (parent || this).#matrix;
@@ -101,8 +101,8 @@ export class Coords {
 
     /**
      * Rotate so that srcAxis goes into dstAxis.
-     * @param {number[]} [srcAxis]
-     * @param {number[]} [dstAxis]
+     * @param {number[]} srcAxis
+     * @param {number[]} dstAxis
      */
     rotateTo(srcAxis, dstAxis) {
         const norm = ([x, y, z]) => sqrt(x*x + y*y + z*z);

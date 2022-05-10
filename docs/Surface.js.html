@@ -37,8 +37,8 @@ import {Shape} from './Shape';
  */
 export class Surface extends Shape {
     /**
-     * @param {number} w - width
-     * @param {number} h - height
+     * @param {number} [w] - width
+     * @param {number} [h] - height
      * @returns {Geometry[]}
      */
     rect(w = 1, h = w) {
@@ -46,8 +46,8 @@ export class Surface extends Shape {
     }
 
     /**
-     * @param {number} w - width
-     * @param {number} h - height
+     * @param {number} [w] - width
+     * @param {number} [h] - height
      * @returns {Geometry[]}
      */
     rightTriangle(w = 1, h = w) {
@@ -57,8 +57,8 @@ export class Surface extends Shape {
     /**
      * Generate a regular polygon with N sides.
      *
-     * @param {number} n - number of sides
-     * @param {number} r - radius of circumscribed circle
+     * @param {number} [n] - number of sides
+     * @param {number} [r] - radius of circumscribed circle
      * @returns {Geometry[]}
      */
     polygon(n = 5, r = 1) {
@@ -72,10 +72,10 @@ export class Surface extends Shape {
     /**
      * Generate a conic section, or a portion of one (annulus, cylinder, cone, etc.)
      *
-     * @param {number} r1 - inner radius
-     * @param {number} r2 - outer radius
-     * @param {number} h - height
-     * @param {number} angle - included arc angle
+     * @param {number} [r1] - inner radius
+     * @param {number} [r2] - outer radius
+     * @param {number} [h] - height
+     * @param {number} [angle = 2*pi] - included arc angle
      * @returns {Geometry[]}
      */
     conic(r1 = 0, r2 = 1, h = 1, angle = 2*pi) {
@@ -93,8 +93,8 @@ export class Surface extends Shape {
     /**
      * Generate a disc, or a portion of one.
      *
-     * @param {number} r - radius
-     * @param {number} angle - included arc angle
+     * @param {number} [r] - radius
+     * @param {number} [angle = 2*pi] - included arc angle
      * @returns {Geometry[]}
      */
     disc(r = 1, angle = 2*pi) {
@@ -104,9 +104,9 @@ export class Surface extends Shape {
     /**
      * Generate a cylinder, or a portion of one.
      *
-     * @param {number} r - radius
-     * @param {number} h - height
-     * @param {number} angle - included arc angle
+     * @param {number} [r] - radius
+     * @param {number} [h] - height
+     * @param {number} [angle = 2*pi] - included arc angle
      * @returns {Geometry[]}
      */
     cylinder(r = 1, h = 1, angle = 2*pi) {
@@ -116,11 +116,11 @@ export class Surface extends Shape {
     /**
      * Generate a hemisphere with cubic tesselation.
      *
-     * @param {number} r - radius
+     * @param {number} [r] - radius
      * @param {boolean} [rev] - reverse orientation (normal pointing inward)
      * @returns {Geometry[]}
      */
-    hemisphere(r = 1, rev) {
+    hemisphere(r = 1, rev = false) {
         const dv = ceiling(this.dv/4);
         const sRange = [-0.5, 0.5, dv];
         const tRange = [rev ? 0.5 : 0, rev ? 0 : 0.5, dv];
@@ -138,14 +138,14 @@ export class Surface extends Shape {
     /**
      * Generate a sphere with lat/lon tesselation, or a portion of a spherical surface.
      *
-     * @param {number} r - radius
-     * @param {number|function(number): number} angle - longitudinal segment size (0 to 2*pi)
-     * @param {number} azimuth - latitudinal segment size (0 to pi)
-     * @param {number} offset - latitudinal offset (+/-(pi - azimuth)/2)
-     * @param {boolean} rev - reverse orientation (normal pointing inward)
+     * @param {number} [r] - radius
+     * @param {number|function(number): number} [angle = 2*pi] - longitudinal segment size (0 to 2*pi)
+     * @param {number} [azimuth = pi] - latitudinal segment size (0 to pi)
+     * @param {number} [offset] - latitudinal offset (+/-(pi - azimuth)/2)
+     * @param {boolean} [rev] - reverse orientation (normal pointing inward)
      * @returns {Geometry[]}
      */
-    sphereBand(r = 1, angle = 2*pi, azimuth = pi, offset = 0, rev) {
+    sphereBand(r = 1, angle = 2*pi, azimuth = pi, offset = 0, rev = false) {
         const getAngle = (typeof angle === 'function' ? angle : (() => angle));
         return this.surface(
             (u, v) => [

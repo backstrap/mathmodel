@@ -34,7 +34,7 @@ export class Graphable extends Coords {
     }
 
     /**
-     * @param {Graphable|Coords} parent
+     * @param {Graphable|Coords} [parent]
      */
     constructor(parent = null) {
         super(parent);
@@ -54,7 +54,7 @@ export class Graphable extends Coords {
      * @param {Object} options
      * @returns {this}
      */
-    setOptions(options = {}) {
+    setOptions(options) {
         this.#options = Object.assign({}, this.#options, options);
         return this;
     }
@@ -76,7 +76,7 @@ export class Graphable extends Coords {
     }
 
     /**
-     * @param {number} hue - hue as degrees on a color wheel (0-360)
+     * @param {number} [hue] - hue as degrees on a color wheel (0-360)
      * @returns {this}
      */
     hue(hue = 0) {
@@ -85,7 +85,7 @@ export class Graphable extends Coords {
     }
 
     /**
-     * @param {number} saturation - saturation percentage
+     * @param {number} [saturation] - saturation percentage
      * @returns {this}
      */
     saturation(saturation = 0) {
@@ -94,7 +94,7 @@ export class Graphable extends Coords {
     }
 
     /**
-     * @param {number} lightness - lightness percentage
+     * @param {number} [lightness] - lightness percentage
      * @returns {this}
      */
     lightness(lightness = 0) {

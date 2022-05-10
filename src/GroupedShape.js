@@ -7,7 +7,7 @@ import {Shape} from './Shape';
  */
 export class GroupedShape extends Shape {
     /**
-     * @param {GroupedShape|Shape|Coords} parent
+     * @param {GroupedShape|Shape|Coords} [parent]
      */
     constructor(parent = null) {
         super(parent);
