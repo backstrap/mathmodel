@@ -47,6 +47,12 @@ describe('Coords', () => {
         });
     });
 
+    describe('rotateTo method', () => {
+        it('returns this', () => {
+            expect(subject.rotateTo([1, 0, 0], [1, 2, 3])).toBe(subject);
+        });
+    });
+
     describe('quaternion method', () => {
         it('returns this', () => {
             expect(subject.quaternion([0, 0, 0, 0])).toBe(subject);
