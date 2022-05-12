@@ -1,12 +1,5 @@
 // noinspection ES6PreferShortImport
 
-// TODO Impl. MathModel unit tests (three/examples/jsm/ import issue)
-describe('MathModel', () => {
-    it('dummy test', () => {
-        expect(true).toBeTruthy();
-    });
-});
-/*
 import {MathModel} from '../src/MathModel';
 
 describe('MathModel', () => {
@@ -38,4 +31,3 @@ describe('MathModel', () => {
         });
     });
 });
-*/

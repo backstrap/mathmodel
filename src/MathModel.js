@@ -129,16 +129,8 @@ export class MathModel {
      * @param {Geometry[]} objs
      */
     add(...objs) {
-        this.canvas.add(objs);
+        objs.map(obj => this.canvas.add(objs));
         return this;
-    }
-
-    /**
-     * Create STL format string from current geometry data.
-     * @returns {string}
-     */
-    export() {
-        return this.canvas.export();
     }
 
     /**

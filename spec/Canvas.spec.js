@@ -1,12 +1,5 @@
 // noinspection ES6PreferShortImport
 
-// TODO Impl. Canvas unit tests (three/examples/jsm/ import issue)
-describe('Canvas', () => {
-    it('dummy test', () => {
-        expect(true).toBeTruthy();
-    });
-});
-/*
 import {Canvas} from '../src/Canvas';
 
 describe('Canvas', () => {
@@ -49,11 +42,4 @@ describe('Canvas', () => {
             expect(subject.show()).toBe(subject);
         });
     });
-
-    describe('export method', () => {
-        it('returns STL data string', () => {
-            expect(subject.export()).toBe('');
-        });
-    });
 });
-*/

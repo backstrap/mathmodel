@@ -4,7 +4,7 @@ import {threejsTemplate} from './threejsTemplate';
 /* threejsGraphic() based on @backstrap/mathcell:src/render/threejs.js */
 /**
  * @param {string} id - id of an HTML Element on the page
- * @param {Geometry[][]} data - graphic objects to be drawn
+ * @param {Geometry[]} data - graphic objects to be drawn
  * @param {renderConfig} config - a rendering configuration
  * @param {string} scriptUrl - location of render engine script
  * @returns {string} - HTML string defining an iframe
@@ -67,20 +67,19 @@ export function canonicalizeConfig(config, data, texts, points, lines, surfaces)
 
   if (!config.frame) config.axesLabels = false;
 
-  for (let i = 0; i < data.length; i++)
-    for (let j = 0; j < data[i].length; j++) {
-      const d = data[i][j];
-      if (d.type === 'text') texts.push(d);
-      if (d.type === 'point') points.push(d);
-      if (d.type === 'line') {
-        d.points = roundTo(d.points, 3, false); // reduce raw data size
-        lines.push(d);
-      }
-      if (d.type === 'surface') {
-        d.vertices = roundTo(d.vertices, 3, false); // reduce raw data size
-        surfaces.push(d);
-      }
+  for (let j = 0; j < data.length; j++) {
+    const d = data[j];
+    if (d.type === 'text') texts.push(d);
+    if (d.type === 'point') points.push(d);
+    if (d.type === 'line') {
+      d.points = roundTo(d.points, 3, false); // reduce raw data size
+      lines.push(d);
     }
+    if (d.type === 'surface') {
+      d.vertices = roundTo(d.vertices, 3, false); // reduce raw data size
+      surfaces.push(d);
+    }
+  }
 
   const all = [];
   for (let i = 0; i < texts.length; i++) all.push(texts[i].point);

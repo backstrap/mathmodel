@@ -1,5 +1,5 @@
 
-import {Canvas, Coords, Geometry, GeometryOptions, GroupedShape, MathModel, Shape, Surface, Solid, Plot} from './thin';
+import {Canvas, Coords, Geometry, GeometryOptions, GroupedShape, MathModel, Shape, Surface, Solid, Plot, exportSTL} from './thin';
 import * as dummy from './renderThree';
 
-export {Canvas, Coords, Geometry, GeometryOptions, GroupedShape, MathModel, Shape, Surface, Solid, Plot, dummy};
+export {Canvas, Coords, Geometry, GeometryOptions, GroupedShape, MathModel, Shape, Surface, Solid, Plot, exportSTL, dummy};

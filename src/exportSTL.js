@@ -1,6 +1,6 @@
 // noinspection DuplicatedCode
 
-import * as THREE from 'three';
+import {Scene} from 'three';
 import {STLExporter} from 'three/examples/jsm/exporters/STLExporter';
 import {sqrt} from '@backstrap/math';
 import {dataReplacer, dataReviver} from '@backstrap/mathcell';
@@ -13,12 +13,12 @@ import {canonicalizeConfig} from './threejsGraphic';
 
 // noinspection JSUnusedGlobalSymbols
 /**
- * @param {Geometry[][]} data - graphic objects to be drawn
- * @param {renderConfig} config - a rendering configuration
+ * @param {Geometry[]} data - graphic objects to be drawn
+ * @param {renderConfig} [config] - a rendering configuration
  * @returns {string}
  * @private
  */
-export function exportSTL(data, config)
+export function exportSTL(data, config = {})
 {
   return new STLExporter().parse(sceneFromData(data, config));
 }
@@ -26,7 +26,7 @@ export function exportSTL(data, config)
 /**
  * sceneFromData() mimics threejsGraphic(), without lights, cameras, axes, texts, points, lines.
  * Note that only surface objects are supported by STL.
- * @param {Geometry[][]} data - graphic objects to be drawn
+ * @param {Geometry[]} data - graphic objects to be drawn
  * @param {renderConfig} config - a rendering configuration
  * @returns {Object3D}
  * @private
@@ -50,7 +50,7 @@ function sceneFromData(data, config) {
  */
 function generateScene(config, surfaces)
 {
-  const scene = new THREE.Scene();
+  const scene = new Scene();
   const a = config.aspectRatio; // aspect multipliers
   let xMin = config.xMin, yMin = config.yMin, zMin = config.zMin;
   let xMax = config.xMax, yMax = config.yMax, zMax = config.zMax;

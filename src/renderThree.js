@@ -180,6 +180,13 @@ function suspendAnimation() {
   suspendTimer = setTimeout( function() { if ( config.animate ) { animate = true; render(); } }, 5000 );
 }
 
+function toggleAnimation() {
+  animate = config.animate = !config.animate;
+  if (animate) {
+    render();
+  }
+}
+
 for ( let i = 0 ; i < texts.length ; i++ ) {
   const t = texts[i];
   addLabel( t.text, t.point[0], t.point[1], t.point[2], t.options.color, t.options.fontSize );
@@ -235,18 +242,18 @@ if ( config.clippingPlane ) {
 
 }
 
-function render() {
-
+function render()
+{
   if ( animate ) requestAnimationFrame( render );
-  renderer.render( scene, camera );
 
-  scene.children.forEach( child => {
+  renderer.render(scene, camera);
 
-    if ( child.userData.rotateOnAxis && animate )
-      child.rotateOnAxis( child.userData.axis, child.userData.angle );
-
-  } );
-
+  if (animate) {
+    scene.children.forEach(child => {
+      if (child.userData.rotateOnAxis)
+        child.rotateOnAxis(child.userData.axis, child.userData.angle);
+    });
+  }
 }
 
 render();

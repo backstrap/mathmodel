@@ -10,5 +10,6 @@ import {Shape} from './Shape';
 import {Surface} from './Surface';
 import {Solid} from './Solid';
 import {Plot} from './Plot';
+import {exportSTL} from './exportSTL';
 
-export {Canvas, Coords, Geometry, GeometryOptions, GroupedShape, MathModel, Shape, Surface, Solid, Plot};
+export {Canvas, Coords, Geometry, GeometryOptions, GroupedShape, MathModel, Shape, Surface, Solid, Plot, exportSTL};

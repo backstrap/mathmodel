@@ -1,4 +1,3 @@
-import {exportSTL} from './exportSTL';
 import {threejsGraphic} from './threejsGraphic';
 
 /* IOSFix() code taken from @backstrap/mathcell/src/core.js */
@@ -23,7 +22,7 @@ export class Canvas {
     /** @member {string} */
     #id;
 
-    /** @member {Geometry[][]} */
+    /** @member {Geometry[]} */
     #data = [];
 
     /** @member {renderConfig} */
@@ -64,7 +63,7 @@ export class Canvas {
 
     /**
      * Add graphics object to the buffer.
-     * @param {Geometry[][]} objs
+     * @param {Geometry[]} objs
      * @returns {this}
      */
     add(objs) {
@@ -90,24 +89,17 @@ export class Canvas {
         return this;
     }
 
-    /**
-     * Create STL format string from current geometry data.
-     * @returns {string}
-     */
-    export() {
-        return exportSTL(this.#data, this.#config);
-    }
-
     // noinspection JSMethodCanBeStatic
     /**
      * Code based on @backstrap/mathcell/src/core.js:evaluate()
      *
      * @param {string} id - the id of a document element
-     * @param {Geometry[][]|Geometry[][][]} data - data to be rendered
+     * @param {Geometry[]|Geometry[][]} data - data to be rendered
      * @param {renderConfig} config - a rendering configuration
      */
     #evaluate(id, data, config) {
-        const outputs = document.querySelectorAll('[id^=' + id + 'output]');
+        const outputs = typeof document === 'undefined' ? [] :
+            document.querySelectorAll('[id^=' + id + 'output]');
 
         if (outputs.length === 1) {
             const output = outputs[0];
