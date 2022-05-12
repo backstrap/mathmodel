@@ -29,5 +29,11 @@ describe('MathModel', () => {
         it('returns this', () => {
             expect(subject.add([])).toBe(subject);
         });
+        it('passes args to Canvas.add', () => {
+            jest.spyOn(subject.canvas, 'add');
+            subject.add(['a'], ['b']);
+            expect(subject.canvas.add).toHaveBeenCalledWith(['a']);
+            expect(subject.canvas.add).toHaveBeenCalledWith(['b']);
+        });
     });
 });

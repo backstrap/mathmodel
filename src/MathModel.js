@@ -129,7 +129,7 @@ export class MathModel {
      * @param {Geometry[]} objs
      */
     add(...objs) {
-        objs.map(obj => this.canvas.add(objs));
+        objs.map(obj => this.canvas.add(obj));
         return this;
     }
 
