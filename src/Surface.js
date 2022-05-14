@@ -1,6 +1,6 @@
 // noinspection JSUnusedGlobalSymbols
 
-import {ceiling, sqrt, exp, complex, sin, cos, pi} from '@backstrap/math';
+import {abs, ceiling, sqrt, exp, complex, sin, cos, pi} from '@backstrap/math';
 import {Shape} from './Shape';
 
 /**
@@ -58,7 +58,7 @@ export class Surface extends Shape {
                 (0.5 - u)*h
             ],
             [0, 1, 1],
-            [0, 1, ceiling(this.dv*angle/(2*pi))]
+            [0, 1, ceiling(abs(this.dv*angle/(2*pi)))]
         );
     }
 
@@ -125,8 +125,8 @@ export class Surface extends Shape {
                 r*sin(getAngle(v)*u)*cos(azimuth*v + offset),
                 r*sin(azimuth*v + offset)
             ],
-            [-0.5, 0.5, 2*ceiling(this.dv*getAngle(0)/(2*pi))],
-            [rev ? 0.5 : -0.5, rev ? -0.5 : 0.5, 2*ceiling(this.dv*azimuth/(2*pi))]
+            [-0.5, 0.5, 2*ceiling(abs(this.dv*getAngle(0)/(2*pi)))],
+            [rev ? 0.5 : -0.5, rev ? -0.5 : 0.5, 2*ceiling(abs(this.dv*azimuth/(2*pi)))]
         );
     }
 }
