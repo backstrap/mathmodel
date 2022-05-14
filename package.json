@@ -1,6 +1,6 @@
 {
   "name": "@backstrap/mathmodel",
-  "version": "2.0.2",
+  "version": "2.1.0",
   "description": "3D modeling and display package built on MathCell and Three",
   "homepage": "https://backstrap.github.io/mathmodel/",
   "author": "Kevin Perry perry@princeton.edu",

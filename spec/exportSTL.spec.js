@@ -15,7 +15,7 @@ describe('exportSTL', () => {
     });
 
     it('returns STL data string', () => {
-        expect(exportSTL()).toStrictEqual('');
+        expect(exportSTL([], false)).toStrictEqual('');
     });
 });
 */

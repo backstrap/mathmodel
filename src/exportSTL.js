@@ -14,13 +14,13 @@ import {canonicalizeConfig} from './threejsGraphic';
 // noinspection JSUnusedGlobalSymbols
 /**
  * @param {Geometry[]} data - graphic objects to be drawn
+ * @param {boolean} [binary] - whether to export as binary or text STL format
  * @param {renderConfig} [config] - a rendering configuration
  * @returns {string}
- * @private
  */
-export function exportSTL(data, config = {})
+export function exportSTL(data, binary = true, config = {})
 {
-  return new STLExporter().parse(sceneFromData(data, config));
+  return new STLExporter().parse(sceneFromData(data, config), {binary: binary});
 }
 
 /**

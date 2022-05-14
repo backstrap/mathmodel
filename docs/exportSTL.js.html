@@ -28,59 +28,64 @@
         <article>
             <pre class="prettyprint source linenums"><code>// noinspection DuplicatedCode
 
-import * as THREE from 'three';
+import {Scene} from 'three';
 import {STLExporter} from 'three/examples/jsm/exporters/STLExporter';
 import {sqrt} from '@backstrap/math';
 import {dataReplacer, dataReviver} from '@backstrap/mathcell';
-import {addPoint, addLine, addSurface} from './threejsScene';
+import {addSurface} from './threejsScene';
 import {canonicalizeConfig} from './threejsGraphic';
 
 /*
- * Usage: getSTLString(data, config);
+ * Usage: exportSTL(data, config);
  */
 
 // noinspection JSUnusedGlobalSymbols
 /**
- * @param {Geometry[][]} data - graphic objects to be drawn
- * @param {renderConfig} config - a rendering configuration
+ * @param {Geometry[]} data - graphic objects to be drawn
+ * @param {boolean} [binary] - whether to export as binary or text STL format
+ * @param {renderConfig} [config] - a rendering configuration
  * @returns {string}
  */
-export function getSTLString(data, config)
+export function exportSTL(data, binary = true, config = {})
 {
-  return new STLExporter().parse(sceneFromData(data, config));
+  return new STLExporter().parse(sceneFromData(data, config), {binary: binary});
 }
 
 /**
- * @param {Geometry[][]} data - graphic objects to be drawn
+ * sceneFromData() mimics threejsGraphic(), without lights, cameras, axes, texts, points, lines.
+ * Note that only surface objects are supported by STL.
+ * @param {Geometry[]} data - graphic objects to be drawn
  * @param {renderConfig} config - a rendering configuration
  * @returns {Object3D}
  * @private
  */
 function sceneFromData(data, config) {
   // working copy of data
-  data = JSON.parse( JSON.stringify( data, dataReplacer ), dataReviver );
+  data = JSON.parse(JSON.stringify( data, dataReplacer ), dataReviver);
 
-  const points = [], lines = [], surfaces = [];
+  const surfaces = [];
 
-  canonicalizeConfig(config, data, [], points, lines, surfaces);
+  canonicalizeConfig(config, data, [], [], [], surfaces);
 
-  return generateScene( points, lines, surfaces, config );
+  return generateScene(config, surfaces);
 }
 
 /**
+ * generateScene() mimics renderThree(), without lights, cameras, axes, texts, points, lines.
+ * Note that only surface objects are supported by STL.
  * @returns {Object3D}
  * @private
  */
-function generateScene(points, lines, surfaces, config = {})
+function generateScene(config, surfaces)
 {
-  const scene = new THREE.Scene();
+  const scene = new Scene();
   const a = config.aspectRatio; // aspect multipliers
   let xMin = config.xMin, yMin = config.yMin, zMin = config.zMin;
   let xMax = config.xMax, yMax = config.yMax, zMax = config.zMax;
 
-  if ( xMin === xMax ) { xMin -= 1; xMax += 1; }
-  if ( yMin === yMax ) { yMin -= 1; yMax += 1; }
-  if ( zMin === zMax ) { zMin -= 1; zMax += 1; }
+  if (xMin === xMax) { xMin -= 1; xMax += 1; }
+  if (yMin === yMax) { yMin -= 1; yMax += 1; }
+  if (zMin === zMax) { zMin -= 1; zMax += 1; }
 
   // apply aspect multipliers for convenience
   xMin *= a[0]; yMin *= a[1]; zMin *= a[2];
@@ -88,53 +93,18 @@ function generateScene(points, lines, surfaces, config = {})
 
   const xRange = xMax - xMin;
   const yRange = yMax - yMin;
-  let zRange = zMax - zMin;
   const rRange = sqrt( xRange*xRange + yRange*yRange );
+  let zRange = zMax - zMin;
 
-  if ( zRange > rRange &amp;&amp; a[2] === 1 &amp;&amp; !config.equalAspect ) {
+  if (zRange > rRange &amp;&amp; a[2] === 1 &amp;&amp; !config.equalAspect) {
     a[2] = rRange / zRange;
     zMin *= a[2];
     zMax *= a[2];
   }
 
-  for ( let i = 0 ; i &lt; points.length ; i++ ) addPoint( scene, points[i], a );
-
-  const newLines = [];
-  let tempPoints = [];
-
-  for ( let i = 0 ; i &lt; lines.length ; i++ ) {
-    lines[i].points.forEach( v => {
-      // apply aspect multipliers for convenience
-      //   and set points outside bounds or NaN to empty array
-      v[0] *= a[0]; v[1] *= a[1]; v[2] *= a[2];
-      if ( v[0] &lt; xMin || v[0] > xMax || v[1] &lt; yMin || v[1] > yMax
-             || v[2] &lt; zMin || v[2] > zMax || isNaN(v[2]) )
-        v.splice(0);
-    } );
-
-    // split lines at empty points
-    for ( let j = 0 ; j &lt; lines[i].points.length ; j++ )
-      if ( lines[i].points[j].length === 0 ) {
-        tempPoints = lines[i].points.splice( j );
-        if ( j === 0 ) lines[i].points = [[0,0,0]]; // dummy line for options
-      }
-
-    let l = [];
-    for ( let j = 0 ; j &lt; tempPoints.length ; j++ ) {
-      const p = tempPoints[j];
-      if ( p.length > 0 ) l.push( p );
-      else if ( l.length > 0 ) {
-        newLines.push( { points: l, options: lines[i].options } );
-        l = [];
-      }
-    }
-    if ( l.length > 0 ) newLines.push( { points: l, options: lines[i].options } );
+  for (let i = 0 ; i &lt; surfaces.length ; i++) {
+    addSurface(scene, surfaces[i], a, zMin, zMax);
   }
-
-  newLines.forEach( l => lines.push( l ) );
-
-  for ( let i = 0 ; i &lt; lines.length ; i++ ) addLine( scene, lines[i] );
-  for ( let i = 0 ; i &lt; surfaces.length ; i++ ) addSurface( scene, surfaces[i], a, zMin, zMax );
 
   return scene;
 }
@@ -148,7 +118,7 @@ function generateScene(points, lines, surfaces, config = {})
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Canvas.html">Canvas</a></li><li><a href="Coords.html">Coords</a></li><li><a href="Geometry.html">Geometry</a></li><li><a href="GeometryOptions.html">GeometryOptions</a></li><li><a href="Graphable.html">Graphable</a></li><li><a href="GroupedShape.html">GroupedShape</a></li><li><a href="MathModel.html">MathModel</a></li><li><a href="Plot.html">Plot</a></li><li><a href="Shape.html">Shape</a></li><li><a href="Solid.html">Solid</a></li><li><a href="Surface.html">Surface</a></li></ul><h3>Global</h3><ul><li><a href="global.html#getSTLString">getSTLString</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Canvas.html">Canvas</a></li><li><a href="Coords.html">Coords</a></li><li><a href="Geometry.html">Geometry</a></li><li><a href="GeometryOptions.html">GeometryOptions</a></li><li><a href="Graphable.html">Graphable</a></li><li><a href="GroupedShape.html">GroupedShape</a></li><li><a href="MathModel.html">MathModel</a></li><li><a href="Plot.html">Plot</a></li><li><a href="Shape.html">Shape</a></li><li><a href="Solid.html">Solid</a></li><li><a href="Surface.html">Surface</a></li></ul><h3>Global</h3><ul><li><a href="global.html#exportSTL">exportSTL</a></li></ul>
 </nav>
 
 <br class="clear">
