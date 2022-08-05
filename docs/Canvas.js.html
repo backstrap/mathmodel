@@ -28,16 +28,6 @@
         <article>
             <pre class="prettyprint source linenums"><code>import {threejsGraphic} from './threejsGraphic';
 
-/* IOSFix() code taken from @backstrap/mathcell/src/core.js */
-const iOSFix = output => {
-    const iframe = output.children[0];
-
-    if (/(iPad|iPhone|iPod)/g.test(navigator.userAgent)) {
-        iframe.style.width = getComputedStyle(iframe).width;
-        iframe.style.height = getComputedStyle(iframe).height;
-    }
-};
-
 /**
  * Class representing a MathCell display output cell.
  * Used by {@link MathModel} only.
@@ -120,6 +110,7 @@ export class Canvas {
     // noinspection JSMethodCanBeStatic
     /**
      * Code based on @backstrap/mathcell/src/core.js:evaluate()
+     * Altered to pass the DOM output object instead of its ID, for efficiency.
      *
      * @param {string} id - the id of a document element
      * @param {Geometry[]|Geometry[][]} data - data to be rendered
@@ -130,10 +121,7 @@ export class Canvas {
             document.querySelectorAll('[id^=' + id + 'output]');
 
         if (outputs.length === 1) {
-            const output = outputs[0];
-
-            output.innerHTML = threejsGraphic(id, data, config, this.#scriptUrl);
-            iOSFix(output);
+            threejsGraphic(outputs[0], data, config, this.#scriptUrl);
         } else {
             for (let i = 0 ; i &lt; outputs.length ; i ++) {
                 const output = outputs[i];
@@ -142,8 +130,7 @@ export class Canvas {
 
                 c.output = n;
                 c.no3DBorder = true;
-                output.innerHTML = threejsGraphic(id, data[i], c, this.#scriptUrl);
-                iOSFix(output);
+                threejsGraphic(output, data[i], c, this.#scriptUrl);
             }
         }
     }

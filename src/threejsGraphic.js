@@ -1,55 +1,86 @@
 import {dataReplacer, dataReviver, roundTo, minMax, colormap} from '@backstrap/mathcell';
-import {threejsTemplate} from './threejsTemplate';
+
+/* IOSFix() code taken from @backstrap/mathcell/src/core.js */
+const iOSFix = output => {
+    const iframe = output.children[0];
+
+    if (/(iPad|iPhone|iPod)/g.test(navigator.userAgent)) {
+        iframe.style.width = getComputedStyle(iframe).width;
+        iframe.style.height = getComputedStyle(iframe).height;
+    }
+};
 
 /* threejsGraphic() based on @backstrap/mathcell:src/render/threejs.js */
 /**
- * @param {string} id - id of an HTML Element on the page
+ * Either creates an iframe if needed,
+ * or else re-runs the renderThree() function
+ * on the appropriate iframe's content window,
+ * to render with the given data and config.
+ * @param {Node} output - an HTML Element on the page
  * @param {Geometry[]} data - graphic objects to be drawn
  * @param {renderConfig} config - a rendering configuration
  * @param {string} scriptUrl - location of render engine script
- * @returns {string} - HTML string defining an iframe
  * @private
  */
-export function threejsGraphic(id, data, config, scriptUrl) {
-
-  // working copy of data
-  data = JSON.parse( JSON.stringify( data, dataReplacer ), dataReviver );
-
-  const n = 'output' in config ? config.output : '';
-  const output = document.getElementById( id + 'output' + n );
-
-  if ( output.children.length > 0 && output.children[0].contentWindow ) {
-
-    const cw = output.children[0].contentWindow;
-    const v = cw.camera.position;
-
-    // only direction of viewpoint meaningful, not normalization
-    config.viewpoint = [ v.x - cw.xMid, v.y - cw.yMid, v.z - cw.zMid ];
-
-  }
-
+export function threejsGraphic(output, data, config, scriptUrl) {
   let texts = [], points = [], lines = [], surfaces = [];
-
-  canonicalizeConfig(config, data, texts, points, lines, surfaces);
-
+  let lights = [{ position: [-5,3,0], color: 'rgb(127,127,127)', parent: 'camera' }];
   // noinspection JSUnresolvedVariable
   const border = config.no3DBorder ? 'none' : '1px solid black';
 
-  const configStr = JSON.stringify( config );
+  // make a clean working copy of data
+  data = JSON.parse( JSON.stringify( data, dataReplacer ), dataReviver );
 
-  const lights = JSON.stringify( [ { position: [-5,3,0], color: 'rgb(127,127,127)', parent: 'camera' } ] );
+  canonicalizeConfig(config, data, texts, points, lines, surfaces);
 
-  texts = JSON.stringify( texts );
-  points = JSON.stringify( points );
-  lines = JSON.stringify( lines, dataReplacer );
-  surfaces = JSON.stringify( surfaces, dataReplacer );
+  if ( output.children.length > 0 && output.children[0].contentWindow ) {
+    const cw = output.children[0].contentWindow;
+    const v = cw.camera.position;
 
-  const html = threejsTemplate( configStr, lights, texts, points, lines, surfaces, scriptUrl )
-      .replace( /"/g, '&quot;' );
+    // only direction of viewpoint is meaningful, not normalization
+    config.viewpoint = [ v.x - cw.xMid, v.y - cw.yMid, v.z - cw.zMid ];
+    cw.renderThree(config, lights, texts, points, lines, surfaces);
+  } else {
+    const configStr = JSON.stringify( config );
 
-  return `<!--suppress ALL -->
+    lights = JSON.stringify( lights );
+    texts = JSON.stringify( texts );
+    points = JSON.stringify( points );
+    lines = JSON.stringify( lines, dataReplacer );
+    surfaces = JSON.stringify( surfaces, dataReplacer );
+
+    const html = `
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title></title>
+    <meta charset="utf-8">
+    <meta name=viewport content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <style>
+       body { margin: 0; overflow: hidden; }
+    </style>
+  </head>
+  <body>
+    <script src="${scriptUrl}"></script>
+    <!--suppress JSUnusedGlobalSymbols -->
+    <!--suppress JSUnusedAssignment -->
+    <script>
+      const config = ${configStr};
+      const lights = ${lights};
+      const texts = ${texts};
+      const points = ${points};
+      const lines = ${lines};
+      const surfaces = ${surfaces};
+      renderThree(config, lights, texts, points, lines, surfaces);
+    </script>
+  </body>
+</html>`.replace(/"/g, '&quot;');
+
+    output.innerHTML = `<!--suppress ALL -->
 <iframe style="width: 100%; height: 100%; border: ${border};"
         srcdoc="${html}" scrolling="no"></iframe>`;
+    iOSFix(output);
+  }
 }
 
 export function canonicalizeConfig(config, data, texts, points, lines, surfaces)

@@ -8,7 +8,7 @@ import {addPoint, addLine, addSurface} from './threejsScene';
  * The body of the renderThree() function is essentially
  * a copy of the boilerplate code from the inlined script
  * created by @backstrap/mathcell/src/render/threejs-template.js:threejsTemplate()
- * It is used in the template created by mathmodel's threejsTemplate() function.
+ * It is used in the template created by mathmodel's threejsGraphic() function.
  */
 if (typeof window !== 'undefined') {
 window.renderThree = function renderThree(config, lights, texts, points, lines, surfaces) {
@@ -19,6 +19,9 @@ const renderer = new THREE.WebGLRenderer( { antialias: true } );
 renderer.setPixelRatio( window.devicePixelRatio );
 renderer.setSize( window.innerWidth, window.innerHeight );
 renderer.setClearColor( config.clearColor, 1 );
+for (let oldCanvas of document.body.getElementsByTagName('canvas')) {
+    document.body.removeChild(oldCanvas);
+}
 document.body.appendChild( renderer.domElement );
 
 const a = config.aspectRatio; // aspect multipliers
