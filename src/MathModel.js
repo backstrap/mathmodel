@@ -107,7 +107,7 @@ export class MathModel {
             const cell = document.getElementById(id);
 
             if (cell && cell.classList.contains('mathcell')) {
-                new this.constructor(id).run(cell);
+                new this(id).run(cell);
             } else {
                 console.log('Unknown cell id "' + id + '"');
             }
