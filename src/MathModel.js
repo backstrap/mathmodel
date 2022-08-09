@@ -90,6 +90,30 @@ export class MathModel {
         });
     }
 
+    // noinspection JSUnusedGlobalSymbols
+    /**
+     * Attempt to load an instance of the current (sub)class into a DOM element.
+     * This is meant to be used by a subclass to instantiate itself,
+     * when your script only needs to support loading a single MathCell
+     * (otherwise use loadMathCells(document, classMap).)
+     * @param {String} id - id of a DOM element with class "mathcell" contained in the document
+     * @param {Document} document - a DOM document
+     */
+    static loadMathCell(id, document = window.document) {
+        // For input onchange events
+        window.checkLimits = checkLimits;
+
+        window.addEventListener('load', () => {
+            const cell = document.getElementById(id);
+
+            if (cell && cell.classList.contains('mathcell')) {
+                new this.constructor(id).run(cell);
+            } else {
+                console.log('Unknown cell id "' + id + '"');
+            }
+        });
+    }
+
     /**
      * @param {Object} params - the parameter values from our configured inputs
      */
