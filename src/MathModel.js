@@ -69,10 +69,10 @@ export class MathModel {
     // noinspection JSUnusedGlobalSymbols
     /**
      * Attempt to load all mathcells in a document
-     * @param {Document} document - a DOM document
      * @param {Object} classMap - an object which maps id's to Classes
+     * @param {Document} document - a DOM document (defaults to window.document)
      */
-    static loadMathCells(document, classMap) {
+    static loadMathCells(classMap, document = window.document) {
         // For input onchange events
         window.checkLimits = checkLimits;
 
@@ -86,30 +86,6 @@ export class MathModel {
                 } else {
                     console.log('Unknown model id "' + cell.id + '"');
                 }
-            }
-        });
-    }
-
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * Attempt to load an instance of the current (sub)class into a DOM element.
-     * This is meant to be used by a subclass to instantiate itself,
-     * when your script only needs to support loading a single MathCell
-     * (otherwise use loadMathCells(document, classMap).)
-     * @param {String} id - id of a DOM element with class "mathcell" contained in the document
-     * @param {Document} document - a DOM document
-     */
-    static loadMathCell(id, document = window.document) {
-        // For input onchange events
-        window.checkLimits = checkLimits;
-
-        window.addEventListener('load', () => {
-            const cell = document.getElementById(id);
-
-            if (cell && cell.classList.contains('mathcell')) {
-                new this(id).run(cell);
-            } else {
-                console.log('Unknown cell id "' + id + '"');
             }
         });
     }
