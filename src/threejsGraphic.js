@@ -37,6 +37,7 @@ export function threejsGraphic(output, data, config, scriptUrl) {
     const cw = output.children[0].contentWindow;
     const v = cw.camera.position;
 
+    cw.dispatchEvent(new Event('endanimation'));
     // only direction of viewpoint is meaningful, not normalization
     config.viewpoint = [ v.x - cw.xMid, v.y - cw.yMid, v.z - cw.zMid ];
     cw.renderThree(config, lights, texts, points, lines, surfaces);

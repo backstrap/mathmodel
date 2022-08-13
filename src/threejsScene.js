@@ -62,8 +62,7 @@ export function addLine(scene, l)
                                        : new THREE.Line( geometry, material );
   mesh.position.set( c.x, c.y, c.z );
   mesh.updateMatrixWorld();
-  scene.add( mesh );
-
+  scene.add(handleAnimationOptions(l.options, mesh, scene.getObjectByName(l.options.group)));
 }
 
 export function addSurface(scene, s, a, zMin, zMax)
@@ -160,23 +159,32 @@ export function addSurface(scene, s, a, zMin, zMax)
   mesh.position.set( c.x, c.y, c.z );
   mesh.updateMatrixWorld();
   if ( s.options.renderOrder ) mesh.renderOrder = s.options.renderOrder;
+  scene.add(handleAnimationOptions(s.options, mesh, scene.getObjectByName(s.options.group)));
+}
+
+function handleAnimationOptions(options, mesh, group) {
+  let sceneObject;
+
   // noinspection JSUnresolvedVariable
-  if ( s.options.rotationAxisAngle ) {
+  if ( options.rotationAxisAngle ) {
     mesh.userData.rotateOnAxis = true;
     // noinspection JSUnresolvedVariable
-    const v = s.options.rotationAxisAngle[0];
+    const v = options.rotationAxisAngle[0];
     mesh.userData.axis = new THREE.Vector3( v[0], v[1], v[2] ).normalize();
     // noinspection JSUnresolvedVariable
-    mesh.userData.angle = s.options.rotationAxisAngle[1];
+    mesh.userData.angle = options.rotationAxisAngle[1];
+  }
+  if ( options.mogrifyMax > 0 && options.mogrifyStep >= 0 ) {
+    mesh.userData.mogrifyMax = options.mogrifyMax;
+    mesh.userData.mogrifyStep = options.mogrifyStep;
+    mesh.userData.mogrifyCount = options.mogrifyCount||1;
   }
 
-  if ( 'group' in s.options ) {
-
-    let group = scene.getObjectByName( s.options.group );
+  if ( 'group' in options ) {
     if ( !group ) {
       group = new THREE.Group();
-      group.name = s.options.group;
-      scene.add( group );
+      group.name = options.group;
+      sceneObject = group;
     }
     mesh.position.sub(group.position);
     group.add( mesh );
@@ -188,14 +196,29 @@ export function addSurface(scene, s, a, zMin, zMax)
       group.userData.angle = mesh.userData.angle;
 
       // noinspection JSUnresolvedVariable
-      if (s.options.rotationOrigin) {
+      if (options.rotationOrigin) {
         // noinspection JSUnresolvedVariable
-        const shift = (new THREE.Vector3(...s.options.rotationOrigin)).sub(group.position);
+        const shift = (new THREE.Vector3(...options.rotationOrigin)).sub(group.position);
         group.traverse(obj => obj.position[obj === group ? 'add' : 'sub'](shift));
         group.updateMatrixWorld();
       }
     }
+
+    if ( mesh.userData.mogrifyMax ) {
+        group.userData.mogrifyMax = mesh.userData.mogrifyMax;
+        group.userData.mogrifyStep = mesh.userData.mogrifyStep;
+        group.userData.mogrifyCount = mesh.userData.mogrifyCount;
+        delete mesh.userData.mogrifyMax;
+        delete mesh.userData.mogrifyStep;
+        delete mesh.userData.mogrifyCount;
+        group.visible = (group.userData.mogrifyStep === 0);
+    }
   } else {
-    scene.add( mesh );
+    if ( mesh.userData.mogrifyMax ) {
+        mesh.visible = (mesh.userData.mogrifyStep === 0);
+    }
+    sceneObject = mesh;
   }
+
+  return sceneObject;
 }

@@ -12,7 +12,6 @@ import {addPoint, addLine, addSurface} from './threejsScene';
  */
 if (typeof window !== 'undefined') {
 window.renderThree = function renderThree(config, lights, texts, points, lines, surfaces) {
-
 const scene = new THREE.Scene();
 
 const renderer = new THREE.WebGLRenderer( { antialias: true } );
@@ -175,19 +174,20 @@ window.addEventListener( 'touchstart', suspendAnimation );
 window.addEventListener( 'touchmove', suspendAnimation );
 window.addEventListener( 'touchend', suspendAnimation );
 
+window.addEventListener( 'endanimation', endAnimation );
+
 let suspendTimer;
 
 function suspendAnimation() {
-  clearInterval( suspendTimer );
+  clearTimeout( suspendTimer );
   animate = false;
   suspendTimer = setTimeout( function() { if ( config.animate ) { animate = true; render(); } }, 5000 );
 }
 
-function toggleAnimation() {
-  animate = config.animate = !config.animate;
-  if (animate) {
-    render();
-  }
+function endAnimation() {
+  clearTimeout( suspendTimer );
+  config = Object.assign({}, config, {animate: false});
+  animate = false;
 }
 
 for ( let i = 0 ; i < texts.length ; i++ ) {
@@ -245,6 +245,8 @@ if ( config.clippingPlane ) {
 
 }
 
+let mogrifyIndex = 0;
+
 function render()
 {
   if ( animate ) requestAnimationFrame( render );
@@ -253,9 +255,14 @@ function render()
 
   if (animate) {
     scene.children.forEach(child => {
+      if (child.userData.mogrifyMax) {
+        const childStep = (mogrifyIndex%(child.userData.mogrifyMax + 1) - child.userData.mogrifyStep);
+        child.visible = (childStep >= 0 && childStep < child.userData.mogrifyCount);
+      }
       if (child.userData.rotateOnAxis)
         child.rotateOnAxis(child.userData.axis, child.userData.angle);
     });
+    mogrifyIndex += 1;
   }
 }
 
