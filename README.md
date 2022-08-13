@@ -58,12 +58,38 @@ Thus, you can easily transform objects, for example:
     new Solid().rotate(pi/4).stretch(2, 3, 4).block();
 
 Scenes can also be animated by setting the 'animate' property of your MathModel config
-and then setting the rotationAxisAngle (and optionally rotationOrigin) options
-of the shapes that are to be animated (rotation is the only animation currently supported.)
+and then setting various animation properties on the objects to be animated.
+Two forms of animation are currently supported.
+1) Rotation: define rotationAxisAngle and (optionally) rotationOrigin options
+of the shapes to be animated.
+2) Mogrify: add a shape for each keyframe of the animation; on each shape,
+define mogrifyStep, mogrifyMax, and (optionally) mogrifyCount options
+to specify when during the animation that shape will be displayed.
+
+
+    class MyPart extends Shape {
+        // Returns a square which is red for five frames then green for five frames, repeating.
+        get() {
+            const surface = new Surface(this.setOptions({
+                mogrifyStep: 0,
+                mogrifyMax: 10,
+                mogrifyCount: 5,
+                color: '#ff0000',
+            }));
+             
+            return surface.rect().concat(
+                surface.setOptions({mogrifyStep: 5, color: '#00ff00'}).rect()
+            );
+        }
+    }
 
 The <a href="GroupedShape.html">GroupedShape</a> class
-can be used to group elements together into logic objects.
+can be used to group elements together into logical objects.
 Grouped objects will be animated as a single entity.
+The animation properties of the group will be set to
+those of the last item added to the group;
+best practice dictates that all items in a group should be created
+with identical animation properties.
 
     class MyPart extends GroupedShape {
         // Returns a simple spinning shape composed of two squares.
