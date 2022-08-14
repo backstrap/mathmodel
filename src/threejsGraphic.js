@@ -35,11 +35,14 @@ export function threejsGraphic(output, data, config, scriptUrl) {
 
   if ( output.children.length > 0 && output.children[0].contentWindow ) {
     const cw = output.children[0].contentWindow;
-    const v = cw.camera.position;
+
+    if (cw.camera) {
+        const v = cw.camera.position;
+        // only direction of viewpoint is meaningful, not normalization
+        config.viewpoint = [ v.x - cw.xMid, v.y - cw.yMid, v.z - cw.zMid ];
+    }
 
     cw.dispatchEvent(new Event('endanimation'));
-    // only direction of viewpoint is meaningful, not normalization
-    config.viewpoint = [ v.x - cw.xMid, v.y - cw.yMid, v.z - cw.zMid ];
     cw.renderThree(config, lights, texts, points, lines, surfaces);
   } else {
     const configStr = JSON.stringify( config );

@@ -121,6 +121,11 @@ export class MathModel {
     /**
      * @param {Object} params - the parameter values from our configured inputs
      */
+    beforeUpdate(params) { }
+
+    /**
+     * @param {Object} params - the parameter values from our configured inputs
+     */
     update(params) { }
 
     /**
@@ -130,6 +135,7 @@ export class MathModel {
      */
     run(node) {
         let id = node;
+        let first = true;
 
         if (typeof id === 'string' || id instanceof String) {
             node = getNode(id);
@@ -141,9 +147,18 @@ export class MathModel {
         MathCell(id, this.inputs);
         node.update = (id => {
             try {
+                const values = this.#getValues(id, this.inputs);
+
+                this.beforeUpdate(values);
                 this.canvas.clear();
-                this.update(this.#getValues(id, this.inputs));
-                this.canvas.show();
+                // Draw a blank canvas.
+                first = first ? false : this.canvas.show()||false;
+
+                // Allow any DOM changes in beforeUpdate() to take effect.
+                setTimeout(() => {
+                    this.update(values);
+                    this.canvas.show();
+                }, 0);
             } catch (e) {
                 document.getElementById(id + 'output').innerHTML = e.toString();
                 throw e;
