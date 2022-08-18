@@ -99,6 +99,8 @@ export function canonicalizeConfig(config, data, texts, points, lines, surfaces)
   if (!('equalAspect' in config)) config.equalAspect = false;
   if (!('frame' in config)) config.frame = true;
   if (!('viewpoint' in config)) config.viewpoint = 'auto';
+  if (!('viewdistance' in config)) config.viewdistance = 'auto';
+  if (!('suspendTimeout' in config)) config.suspendTimeout = 5000;
 
   if (!config.frame) config.axesLabels = false;
 

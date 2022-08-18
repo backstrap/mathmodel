@@ -127,6 +127,11 @@ camera.up.set( 0, 0, 1 );
 // default auto position, followed by rotation to viewpoint direction
 camera.position.set( xMid, yMid, zMid );
 const defaultOffset = new THREE.Vector3( xRange, yRange, zRange );
+let offsetScale = 0.9;
+if ( config.viewdistance !== 'auto' ) {
+    offsetScale = config.viewdistance/defaultOffset.length();
+}
+defaultOffset.multiplyScalar(offsetScale);
 
 if ( config.viewpoint !== 'auto' ) {
   const v = config.viewpoint;
@@ -181,7 +186,10 @@ let suspendTimer;
 function suspendAnimation() {
   clearTimeout( suspendTimer );
   animate = false;
-  suspendTimer = setTimeout( function() { if ( config.animate ) { animate = true; render(); } }, 5000 );
+  suspendTimer = setTimeout(
+      function() { if ( config.animate ) { animate = true; render(); } },
+      config.suspendTimeout
+  );
 }
 
 function endAnimation() {
