@@ -119,6 +119,10 @@ export class MathModel {
     }
 
     /**
+     * If a subclass overrides beforeUpdate(), and it returns a truthy value,
+     * then the canvas' screen will be cleared before attempting to redraw the content.
+     * If beforeUpdate() returns a falsey value, the content redraw will happen syncronously instead.
+     *
      * @param {Object} params - the parameter values from our configured inputs
      */
     beforeUpdate(params) { }
@@ -149,16 +153,21 @@ export class MathModel {
             try {
                 const values = this.#getValues(id, this.inputs);
 
-                this.beforeUpdate(values);
                 this.canvas.clear();
-                // Draw a blank canvas.
-                first = first ? false : this.canvas.show()||false;
 
-                // Allow any DOM changes in beforeUpdate() to take effect.
-                setTimeout(() => {
+                if (this.beforeUpdate(values)) {
+                    // Draw a blank canvas.
+                    first = first ? false : this.canvas.show()&amp;&amp;false;
+
+                    // Allow any DOM changes in beforeUpdate() to take effect.
+                    setTimeout(() => {
+                        this.update(values);
+                        this.canvas.show();
+                    }, 0);
+                } else {
                     this.update(values);
                     this.canvas.show();
-                }, 0);
+                }
             } catch (e) {
                 document.getElementById(id + 'output').innerHTML = e.toString();
                 throw e;
