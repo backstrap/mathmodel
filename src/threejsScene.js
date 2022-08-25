@@ -184,10 +184,10 @@ function handleAnimationOptions(options, mesh, group) {
     if ( !group ) {
       group = new THREE.Group();
       group.name = options.group;
-      sceneObject = group;
     }
     mesh.position.sub(group.position);
     group.add( mesh );
+    sceneObject = group;
 
     if ( mesh.userData.rotateOnAxis ) {
       mesh.userData.rotateOnAxis = false;
