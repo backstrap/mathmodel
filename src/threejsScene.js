@@ -165,15 +165,37 @@ export function addSurface(scene, s, a, zMin, zMax)
 function handleAnimationOptions(options, mesh, group) {
   let sceneObject;
 
+  // to be removed
   // noinspection JSUnresolvedVariable
   if ( options.rotationAxisAngle ) {
-    mesh.userData.rotateOnAxis = true;
-    // noinspection JSUnresolvedVariable
-    const v = options.rotationAxisAngle[0];
-    mesh.userData.axis = new THREE.Vector3( v[0], v[1], v[2] ).normalize();
-    // noinspection JSUnresolvedVariable
-    mesh.userData.angle = options.rotationAxisAngle[1];
+    options.rotation = { axis: options.rotationAxisAngle[0],
+                           angle: options.rotationAxisAngle[1] }
+    console.log( 'rotationAxisAngle is deprecated: see documentation for new format' );
   }
+
+  // to be removed
+  // noinspection JSUnresolvedVariable
+  if ( options.rotationOrigin ) {
+    // noinspection JSUnresolvedVariable
+    (options.rotation||{}).origin = options.rotationOrigin;
+    console.log( 'rotationOrigin is deprecated: see documentation for new format' );
+  }
+
+  if ( options.rotation ) {
+    const v = options.rotation.axis;
+    mesh.userData.rotation = { axis: new THREE.Vector3( v[0], v[1], v[2] ).normalize(),
+                               angle: options.rotation.angle,
+                               origin: options.rotation.origin };
+  }
+
+  if ( options.translation ) {
+    const arg = options.translation.argument ? options.translation.argument : 't';
+    const step = options.translation.step ? options.translation.step : .05;
+    mesh.userData.translation = { 
+      path: Function( arg, 'return ' + options.translation.path ),
+      step: step, t: 0 };
+  }
+
   if ( options.mogrifyMax > 0 && options.mogrifyStep >= 0 ) {
     mesh.userData.mogrifyMax = options.mogrifyMax;
     mesh.userData.mogrifyStep = options.mogrifyStep;
@@ -189,19 +211,17 @@ function handleAnimationOptions(options, mesh, group) {
     group.add( mesh );
     sceneObject = group;
 
-    if ( mesh.userData.rotateOnAxis ) {
-      mesh.userData.rotateOnAxis = false;
-      group.userData.rotateOnAxis = true;
-      group.userData.axis = mesh.userData.axis;
-      group.userData.angle = mesh.userData.angle;
-
-      // noinspection JSUnresolvedVariable
-      if (options.rotationOrigin) {
-        // noinspection JSUnresolvedVariable
-        const shift = (new THREE.Vector3(...options.rotationOrigin)).sub(group.position);
+    if ( mesh.userData.rotation ) {
+      group.userData.rotation = {
+        axis: mesh.userData.rotation.axis,
+        angle: mesh.userData.rotation.angle
+      };
+      if (mesh.userData.rotation.origin) {
+        const shift = (new THREE.Vector3(...mesh.userData.rotation.origin)).sub(group.position);
         group.traverse(obj => obj.position[obj === group ? 'add' : 'sub'](shift));
         group.updateMatrixWorld();
       }
+      delete mesh.userData.rotation;
     }
 
     if ( mesh.userData.mogrifyMax ) {

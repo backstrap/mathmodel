@@ -33,7 +33,9 @@ export function threejsGraphic(output, data, config, scriptUrl) {
 
   canonicalizeConfig(config, data, texts, points, lines, surfaces);
 
+  // noinspection JSUnresolvedVariable
   if ( output.children.length > 0 && output.children[0].contentWindow ) {
+    // noinspection JSUnresolvedVariable
     const cw = output.children[0].contentWindow;
 
     if (cw.camera) {
@@ -42,8 +44,8 @@ export function threejsGraphic(output, data, config, scriptUrl) {
         config.viewpoint = [ v.x - cw.xMid, v.y - cw.yMid, v.z - cw.zMid ];
     }
 
-    cw.dispatchEvent(new Event('endanimation'));
-    cw.renderThree(config, lights, texts, points, lines, surfaces);
+    cw.dispatchEvent(new Event('endAnimation'));
+    renderThree(config, lights, texts, points, lines, surfaces, cw);
   } else {
     const configStr = JSON.stringify( config );
 
@@ -65,21 +67,22 @@ export function threejsGraphic(output, data, config, scriptUrl) {
     </style>
   </head>
   <body>
-    <script src="${scriptUrl}"></script>
     <!--suppress JSUnusedGlobalSymbols -->
     <!--suppress JSUnusedAssignment -->
     <script>
+      // noinspection JSUnresolvedVariable
       const config = ${configStr};
       const lights = ${lights};
       const texts = ${texts};
       const points = ${points};
       const lines = ${lines};
       const surfaces = ${surfaces};
-      renderThree(config, lights, texts, points, lines, surfaces);
+      parent.renderThree(config, lights, texts, points, lines, surfaces, window);
     </script>
   </body>
 </html>`.replace(/"/g, '&quot;');
 
+    // noinspection JSUndefinedPropertyAssignment
     output.innerHTML = `<!--suppress ALL -->
 <iframe style="width: 100%; height: 100%; border: ${border};"
         srcdoc="${html}" scrolling="no"></iframe>`;
@@ -99,7 +102,7 @@ export function canonicalizeConfig(config, data, texts, points, lines, surfaces)
   if (!('equalAspect' in config)) config.equalAspect = false;
   if (!('frame' in config)) config.frame = true;
   if (!('viewpoint' in config)) config.viewpoint = 'auto';
-  if (!('viewdistance' in config)) config.viewdistance = 'auto';
+  if (!('viewDistance' in config)) config.viewDistance = 'auto';
   if (!('suspendTimeout' in config)) config.suspendTimeout = 5000;
 
   if (!config.frame) config.axesLabels = false;

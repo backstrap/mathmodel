@@ -1,6 +1,6 @@
 {
   "name": "@backstrap/mathmodel",
-  "version": "3.3.2",
+  "version": "3.4.0",
   "description": "3D modeling and display package built on MathCell and Three",
   "homepage": "https://backstrap.github.io/mathmodel/",
   "author": "Kevin Perry perry@princeton.edu",
@@ -25,7 +25,7 @@
   "repository": "github:backstrap/mathmodel",
   "dependencies": {
     "@backstrap/math": "^1.4.9-a",
-    "@backstrap/mathcell": "^1.9.3-a",
+    "@backstrap/mathcell": "^1.10.0-a",
     "three": "^0.139.2"
   },
   "devDependencies": {

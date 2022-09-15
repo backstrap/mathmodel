@@ -9,9 +9,14 @@ import {addPoint, addLine, addSurface} from './threejsScene';
  * a copy of the boilerplate code from the inlined script
  * created by @backstrap/mathcell/src/render/threejs-template.js:threejsTemplate()
  * It is used in the template created by mathmodel's threejsGraphic() function.
+ *
+ * In addition to defining the renderThree() function,
+ * this module also sets event listeners on the passed window object, if they have not already been set,
+ * and defines/updates certain variables on the passed window object: camera, listeners, xMid, yMid, and zMid.
  */
 if (typeof window !== 'undefined') {
-window.renderThree = function renderThree(config, lights, texts, points, lines, surfaces) {
+window.renderThree = function renderThree(config, lights, texts, points, lines, surfaces, window) {
+const document = window.document;
 const scene = new THREE.Scene();
 
 const renderer = new THREE.WebGLRenderer( { antialias: true } );
@@ -49,9 +54,9 @@ if ( zRange > rRange && a[2] === 1 && !config.equalAspect ) {
   zRange *= a[2];
 }
 
-window.xMid = ( xMin + xMax ) / 2;
-window.yMid = ( yMin + yMax ) / 2;
-window.zMid = ( zMin + zMax ) / 2;
+let xMid = window.xMid = ( xMin + xMax ) / 2;
+let yMid = window.yMid = ( yMin + yMax ) / 2;
+let zMid = window.zMid = ( zMin + zMax ) / 2;
 
 if ( config.frame ) {
   const vertices = [ xMin, yMin, zMin, xMax, yMax, zMax ];
@@ -119,7 +124,7 @@ function addLabel( text, x, y, z, color='black', fontsize=14 ) {
 
 if ( config.axes ) scene.add( new THREE.AxesHelper( Math.min( xMax, yMax, zMax ) ) );
 
-window.camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight,
+const camera = window.camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight,
                                           config.cameraNear ? config.cameraNear : .1,
                                           config.cameraFar ? config.cameraFar : 1000 );
 camera.up.set( 0, 0, 1 );
@@ -128,8 +133,8 @@ camera.up.set( 0, 0, 1 );
 camera.position.set( xMid, yMid, zMid );
 const defaultOffset = new THREE.Vector3( xRange, yRange, zRange );
 let offsetScale = 0.9;
-if ( config.viewdistance !== 'auto' ) {
-    offsetScale = config.viewdistance/defaultOffset.length();
+if ( config.viewDistance !== 'auto' ) {
+    offsetScale = config.viewDistance/defaultOffset.length();
 }
 defaultOffset.multiplyScalar(offsetScale);
 
@@ -161,42 +166,46 @@ scene.add( new THREE.AmbientLight( config.ambientLight, 1 ) );
 const controls = new OrbitControls( camera, renderer.domElement );
 controls.target.set( xMid, yMid, zMid );
 controls.addEventListener( 'change', function() { if ( !animate ) render(); } );
-
-window.addEventListener( 'resize', function() {
-
-  renderer.setSize( window.innerWidth, window.innerHeight );
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  if ( !animate ) render();
-
-} );
-
-window.addEventListener( 'mousedown', suspendAnimation );
-window.addEventListener( 'mousemove', suspendAnimation );
-window.addEventListener( 'mousewheel', suspendAnimation );
-
-window.addEventListener( 'touchstart', suspendAnimation );
-window.addEventListener( 'touchmove', suspendAnimation );
-window.addEventListener( 'touchend', suspendAnimation );
-
-window.addEventListener( 'endanimation', endAnimation );
+controls.update();
 
 let suspendTimer;
 
-function suspendAnimation() {
-  clearTimeout( suspendTimer );
-  animate = false;
-  suspendTimer = setTimeout(
-      function() { if ( config.animate ) { animate = true; render(); } },
-      config.suspendTimeout
+if (!window.listeners) {
+  window.addEventListener( 'resize', () => window.listeners.resize() );
+  window.addEventListener( 'endAnimation', () => window.listeners.endAnimation() );
+  ['mousedown', 'mousemove', 'mousewheel', 'touchstart', 'touchmove', 'touchend'].forEach(
+      type => window.addEventListener( type, () => window.listeners.suspendAnimation() )
   );
 }
 
-function endAnimation() {
-  clearTimeout( suspendTimer );
-  config = Object.assign({}, config, {animate: false});
-  animate = false;
-}
+window.listeners = {
+  resize: function resize() {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    if (!animate) render();
+  },
+  suspendAnimation: function suspendAnimation() {
+    // noinspection JSUnresolvedVariable
+    if ( config.animateOnInteraction ) return;
+    clearTimeout(suspendTimer);
+    animate = false;
+    suspendTimer = setTimeout(
+        function () {
+          if (config.animate) {
+            animate = true;
+            render();
+          }
+        },
+        config.suspendTimeout
+    );
+  },
+  endAnimation: function endAnimation() {
+    clearTimeout(suspendTimer);
+    config = Object.assign({}, config, {animate: false});
+    animate = false;
+  },
+};
 
 for ( let i = 0 ; i < texts.length ; i++ ) {
   const t = texts[i];
@@ -267,17 +276,21 @@ function render()
         const childStep = (mogrifyIndex%(child.userData.mogrifyMax + 1) - child.userData.mogrifyStep);
         child.visible = (childStep >= 0 && childStep < child.userData.mogrifyCount);
       }
-      if (child.userData.rotateOnAxis)
-        child.rotateOnAxis(child.userData.axis, child.userData.angle);
+      if (child.userData.rotation) {
+        child.rotateOnAxis(child.userData.rotation.axis, child.userData.rotation.angle);
+      }
+      if (child.userData.translation) {
+        const trans = child.userData.translation;
+        const v = trans.path(trans.t);
+        child.position.set(v[0], v[1], v[2]);
+        trans.t += trans.step;
+      }
     });
     mogrifyIndex += 1;
   }
 }
 
 render();
-controls.update();
-if ( !animate ) render();
 
 };
 }
-
