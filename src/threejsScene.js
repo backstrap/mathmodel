@@ -1,5 +1,7 @@
 import * as THREE from 'three';
 
+const isFunction = f => (f instanceof Function || Object.prototype.toString.call(f) === '[object Function]');
+
 /* function definitions based on @backstrap/mathcell:src/render/threejs-template.js */
 
 export function addPoint(scene, p, a)
@@ -191,8 +193,9 @@ function handleAnimationOptions(options, mesh, group) {
   if ( options.translation ) {
     const arg = options.translation.argument ? options.translation.argument : 't';
     const step = options.translation.step ? options.translation.step : .05;
+    const f = options.translation.path;
     mesh.userData.translation = { 
-      path: Function( arg, 'return ' + options.translation.path ),
+      path: isFunction(f) ? f : Function( arg, 'return ' + f ),
       step: step, t: 0 };
   }
 

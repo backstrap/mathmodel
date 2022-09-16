@@ -70,8 +70,23 @@ export function canonicalizeConfig(config, data, texts, points, lines, surfaces)
   });
 }
 
+const fns = [];
+const copyId = Math.random();
+
+const replace = (key, value) => {
+  if (value instanceof Function || Object.prototype.toString.call(value) === '[object Function]') {
+    return {functionReplacer: copyId, n: fns.push(value)};
+  } else {
+    return dataReplacer(key, value);
+  }
+};
+
+const revive = (key, value) => {
+  return value && value.functionReplacer === copyId && value.n > 0 ? fns[value.n - 1] : dataReviver(key, value);
+};
+
 export function cleanCopy(data)
 {
-  //TODO add ability to pass functions
-  return JSON.parse(JSON.stringify(data, dataReplacer), dataReviver);
+  fns.length = 0;
+  return JSON.parse(JSON.stringify(data, replace), revive);
 }
