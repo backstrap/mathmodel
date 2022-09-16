@@ -61,6 +61,20 @@ export class Graphable extends Coords {
     }
 
     /**
+     * Should only be given settings for object-valued options.
+     * @param {Object} options
+     * @returns {this}
+     */
+    setSubOptions(options) {
+        const updated = {};
+        Object.keys(options).forEach(
+            key => updated[key] = Object.assign({}, this.#options[key], options[key])
+        );
+        this.#options = Object.assign({}, this.#options, updated);
+        return this;
+    }
+
+    /**
      * @param {number} opacity
      * @returns {this}
      */
