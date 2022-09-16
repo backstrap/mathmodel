@@ -192,7 +192,7 @@ function handleAnimationOptions(options, mesh, group) {
 
   if ( options.translation ) {
     const arg = options.translation.argument ? options.translation.argument : 't';
-    const step = options.translation.step ? options.translation.step : .05;
+    const step = Number.isFinite(options.translation.step) ? options.translation.step : .05;
     const f = options.translation.path;
     mesh.userData.translation = { 
       path: isFunction(f) ? f : Function( arg, 'return ' + f ),
@@ -225,6 +225,14 @@ function handleAnimationOptions(options, mesh, group) {
         group.updateMatrixWorld();
       }
       delete mesh.userData.rotation;
+    }
+    if ( mesh.userData.translation ) {
+      group.userData.translation = {
+        path: mesh.userData.translation.path,
+        step: mesh.userData.translation.step,
+        t: mesh.userData.translation.t,
+      };
+      delete mesh.userData.translation;
     }
 
     if ( mesh.userData.mogrifyMax ) {
