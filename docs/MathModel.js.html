@@ -35,13 +35,26 @@ import {Canvas} from './Canvas';
  * @typedef {Object} renderConfig
  * @property {boolean}             [axes]
  * @property {boolean}             [animate]
+ * @property {boolean}             [animateOnInteraction]
  * @property {boolean}             [equalAspect]
  * @property {boolean}             [frame]
  * @property {number}              [cameraNear]
  * @property {number}              [cameraFar]
  * @property {number}              [decimals]
+ * @property {number}              [suspendTimeout]
+ * @property {number}              [xMin]
+ * @property {number}              [yMin]
+ * @property {number}              [zMin]
+ * @property {number}              [xMax]
+ * @property {number}              [yMax]
+ * @property {number}              [zMax]
+ * @property {number[]}            [aspectRatio]
  * @property {number[]}            [viewpoint]
+ * @property {number[]}            [viewDistance]
  * @property {number[]|number[][]} [clippingPlane]
+ * @property {string}              [ambientLight]
+ * @property {string}              [clearColor]
+ * @property {string[]}            [axesLabel]
  */
 /**
  * @typedef {Object} baseConfig
@@ -101,10 +114,11 @@ export class MathModel {
      * @param {Document} document - a DOM document (defaults to window.document)
      */
     static loadMathCells(classMap, document = window.document) {
+        const win = document.defaultView || window;
         // For input onchange events
-        window.checkLimits = checkLimits;
+        win.checkLimits = checkLimits;
 
-        window.addEventListener('load', () => {
+        win.addEventListener('load', () => {
             for (const cell of document.getElementsByClassName('mathcell')) {
                 /** @type {function(string=)} */
                 const Model = classMap[cell.id];
@@ -195,16 +209,6 @@ export class MathModel {
     }
 
     /**
-     * Set the location of the script URL for the rendering engine.
-     * @param {string} scriptUrl
-     * @returns {this}
-     */
-    setScriptUrl(scriptUrl) {
-        this.canvas.setScriptUrl(scriptUrl);
-        return this;
-    }
-
-    /**
      * Get the values from our configured inputs
      * @param {string} id
      * @param {inputConfigSet} inputs
@@ -232,7 +236,7 @@ export class MathModel {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Canvas.html">Canvas</a></li><li><a href="Coords.html">Coords</a></li><li><a href="Geometry.html">Geometry</a></li><li><a href="GeometryOptions.html">GeometryOptions</a></li><li><a href="Graphable.html">Graphable</a></li><li><a href="GroupedShape.html">GroupedShape</a></li><li><a href="MathModel.html">MathModel</a></li><li><a href="Plot.html">Plot</a></li><li><a href="Shape.html">Shape</a></li><li><a href="Solid.html">Solid</a></li><li><a href="Surface.html">Surface</a></li></ul><h3>Global</h3><ul><li><a href="global.html#exportSTL">exportSTL</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Canvas.html">Canvas</a></li><li><a href="Coords.html">Coords</a></li><li><a href="Geometry.html">Geometry</a></li><li><a href="GeometryOptions.html">GeometryOptions</a></li><li><a href="Graphable.html">Graphable</a></li><li><a href="GroupedShape.html">GroupedShape</a></li><li><a href="MathModel.html">MathModel</a></li><li><a href="Plot.html">Plot</a></li><li><a href="Shape.html">Shape</a></li><li><a href="Solid.html">Solid</a></li><li><a href="Surface.html">Surface</a></li></ul><h3>Global</h3><ul><li><a href="global.html#exportSTL">exportSTL</a></li><li><a href="global.html#renderThree">renderThree</a></li></ul>
 </nav>
 
 <br class="clear">

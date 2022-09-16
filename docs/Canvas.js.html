@@ -26,7 +26,8 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import {threejsGraphic} from './threejsGraphic';
+            <pre class="prettyprint source linenums"><code>import {cleanCopy} from './helpers';
+import {threejsGraphic} from './threejsGraphic';
 
 /**
  * Class representing a MathCell display output cell.
@@ -34,9 +35,6 @@
  * @protected
  */
 export class Canvas {
-    /** @member {string} */
-    #scriptUrl = './main.js';
-
     /** @member {string} */
     #id;
 
@@ -66,16 +64,6 @@ export class Canvas {
      */
     configure(config = {}) {
         Object.assign(this.#config, config);
-        return this;
-    }
-
-    /**
-     * Set the location of the script URL for the rendering engine.
-     * @param {string} scriptUrl
-     * @returns {this}
-     */
-    setScriptUrl(scriptUrl) {
-        this.#scriptUrl = scriptUrl;
         return this;
     }
 
@@ -121,16 +109,16 @@ export class Canvas {
             document.querySelectorAll('[id^=' + id + 'output]');
 
         if (outputs.length === 1) {
-            threejsGraphic(outputs[0], data, config, this.#scriptUrl);
+            threejsGraphic(outputs[0], data, cleanCopy(config));
         } else {
             for (let i = 0 ; i &lt; outputs.length ; i ++) {
                 const output = outputs[i];
                 const n = output.id.substring(output.id.indexOf('output') + 6);
-                const c = Array.isArray(config) ? config[i] : JSON.parse(JSON.stringify(config));
+                const c = cleanCopy(Array.isArray(config) ? config[i] : config);
 
                 c.output = n;
                 c.no3DBorder = true;
-                threejsGraphic(output, data[i], c, this.#scriptUrl);
+                threejsGraphic(output, data[i], c);
             }
         }
     }
@@ -145,7 +133,7 @@ export class Canvas {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Canvas.html">Canvas</a></li><li><a href="Coords.html">Coords</a></li><li><a href="Geometry.html">Geometry</a></li><li><a href="GeometryOptions.html">GeometryOptions</a></li><li><a href="Graphable.html">Graphable</a></li><li><a href="GroupedShape.html">GroupedShape</a></li><li><a href="MathModel.html">MathModel</a></li><li><a href="Plot.html">Plot</a></li><li><a href="Shape.html">Shape</a></li><li><a href="Solid.html">Solid</a></li><li><a href="Surface.html">Surface</a></li></ul><h3>Global</h3><ul><li><a href="global.html#exportSTL">exportSTL</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Canvas.html">Canvas</a></li><li><a href="Coords.html">Coords</a></li><li><a href="Geometry.html">Geometry</a></li><li><a href="GeometryOptions.html">GeometryOptions</a></li><li><a href="Graphable.html">Graphable</a></li><li><a href="GroupedShape.html">GroupedShape</a></li><li><a href="MathModel.html">MathModel</a></li><li><a href="Plot.html">Plot</a></li><li><a href="Shape.html">Shape</a></li><li><a href="Solid.html">Solid</a></li><li><a href="Surface.html">Surface</a></li></ul><h3>Global</h3><ul><li><a href="global.html#exportSTL">exportSTL</a></li><li><a href="global.html#renderThree">renderThree</a></li></ul>
 </nav>
 
 <br class="clear">
