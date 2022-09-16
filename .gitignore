@@ -1,5 +1,6 @@
 /coverage/
 /node_modules/
+/three/
 /notes.txt
 .DS_Store
 *-debug.log*

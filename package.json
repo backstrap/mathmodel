@@ -1,6 +1,6 @@
 {
   "name": "@backstrap/mathmodel",
-  "version": "3.4.0",
+  "version": "4.0.0",
   "description": "3D modeling and display package built on MathCell and Three",
   "homepage": "https://backstrap.github.io/mathmodel/",
   "author": "Kevin Perry perry@princeton.edu",
@@ -19,7 +19,7 @@
     "clean": "rm -rf coverage/*.* coverage/lcov-report/* docs/*",
     "doc": "rm -rf doc/* && jsdoc -c jsdoc.json",
     "prepublishOnly": "jsdoc -c jsdoc.json",
-    "test": "rm -rf coverage/* && jest",
+    "test": "mkdir -p three && rm -rf coverage/* three/* && cp node_modules/three/examples/jsm/controls/*.js node_modules/three/examples/jsm/exporters/*.js three/ && jest",
     "watchtest": "rm -rf coverage/* && jest --watchAll"
   },
   "repository": "github:backstrap/mathmodel",
@@ -77,10 +77,16 @@
     "extraGlobals": [
       "JSON"
     ],
+    "setupFiles": [
+        "<rootDir>/spec/setup.js"
+    ],
     "roots": [
       "<rootDir>/src",
       "<rootDir>/spec"
     ],
+    "moduleNameMapper": {
+        "^three/examples/jsm/[a-z]*/(.*)": "<rootDir>/three/$1"
+    },
     "moduleFileExtensions": [
       "js"
     ],

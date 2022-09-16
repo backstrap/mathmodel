@@ -7,13 +7,26 @@ import {Canvas} from './Canvas';
  * @typedef {Object} renderConfig
  * @property {boolean}             [axes]
  * @property {boolean}             [animate]
+ * @property {boolean}             [animateOnInteraction]
  * @property {boolean}             [equalAspect]
  * @property {boolean}             [frame]
  * @property {number}              [cameraNear]
  * @property {number}              [cameraFar]
  * @property {number}              [decimals]
+ * @property {number}              [suspendTimeout]
+ * @property {number}              [xMin]
+ * @property {number}              [yMin]
+ * @property {number}              [zMin]
+ * @property {number}              [xMax]
+ * @property {number}              [yMax]
+ * @property {number}              [zMax]
+ * @property {number[]}            [aspectRatio]
  * @property {number[]}            [viewpoint]
+ * @property {number[]}            [viewDistance]
  * @property {number[]|number[][]} [clippingPlane]
+ * @property {string}              [ambientLight]
+ * @property {string}              [clearColor]
+ * @property {string[]}            [axesLabel]
  */
 /**
  * @typedef {Object} baseConfig
@@ -73,10 +86,11 @@ export class MathModel {
      * @param {Document} document - a DOM document (defaults to window.document)
      */
     static loadMathCells(classMap, document = window.document) {
+        const win = document.defaultView || window;
         // For input onchange events
-        window.checkLimits = checkLimits;
+        win.checkLimits = checkLimits;
 
-        window.addEventListener('load', () => {
+        win.addEventListener('load', () => {
             for (const cell of document.getElementsByClassName('mathcell')) {
                 /** @type {function(string=)} */
                 const Model = classMap[cell.id];
@@ -163,16 +177,6 @@ export class MathModel {
      */
     configure(config) {
         this.canvas.configure(config);
-        return this;
-    }
-
-    /**
-     * Set the location of the script URL for the rendering engine.
-     * @param {string} scriptUrl
-     * @returns {this}
-     */
-    setScriptUrl(scriptUrl) {
-        this.canvas.setScriptUrl(scriptUrl);
         return this;
     }
 

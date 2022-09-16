@@ -3,9 +3,8 @@
 import {Scene} from 'three';
 import {STLExporter} from 'three/examples/jsm/exporters/STLExporter';
 import {sqrt} from '@backstrap/math';
-import {dataReplacer, dataReviver} from '@backstrap/mathcell';
 import {addSurface} from './threejsScene';
-import {canonicalizeConfig} from './threejsGraphic';
+import {canonicalizeConfig, cleanCopy} from './helpers';
 
 /*
  * Usage: exportSTL(data, config);
@@ -33,7 +32,7 @@ export function exportSTL(data, binary = true, config = {})
  */
 function sceneFromData(data, config) {
   // working copy of data
-  data = JSON.parse(JSON.stringify( data, dataReplacer ), dataReviver);
+  data = cleanCopy(data);
 
   const surfaces = [];
 

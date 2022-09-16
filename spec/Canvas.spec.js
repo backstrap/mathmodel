@@ -19,12 +19,6 @@ describe('Canvas', () => {
         });
     });
 
-    describe('setScriptUrl method', () => {
-        it('returns this', () => {
-            expect(subject.setScriptUrl('test.js')).toBe(subject);
-        });
-    });
-
     describe('add method', () => {
         it('returns this', () => {
             expect(subject.add([])).toBe(subject);
@@ -39,6 +33,21 @@ describe('Canvas', () => {
 
     describe('show method', () => {
         it('returns this', () => {
+            expect(subject.show()).toBe(subject);
+        });
+        it('returns this when called for a single canvas', () => {
+            jest.spyOn(document, 'querySelectorAll').mockImplementation(() => [
+                {id: 'test', children: []}
+            ]);
+            expect(subject.show()).toBe(subject);
+        });
+        it('returns this when called for multiple canvases', () => {
+            jest.spyOn(document, 'querySelectorAll').mockImplementation(() => [
+                {id: 'testA', children: []},
+                {id: 'testB', children: []},
+            ]);
+            subject.add([[], []]);
+            subject.configure([{}, {}]);
             expect(subject.show()).toBe(subject);
         });
     });

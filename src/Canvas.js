@@ -1,3 +1,4 @@
+import {cleanCopy} from './helpers';
 import {threejsGraphic} from './threejsGraphic';
 
 /**
@@ -6,9 +7,6 @@ import {threejsGraphic} from './threejsGraphic';
  * @protected
  */
 export class Canvas {
-    /** @member {string} */
-    #scriptUrl = './main.js';
-
     /** @member {string} */
     #id;
 
@@ -38,16 +36,6 @@ export class Canvas {
      */
     configure(config = {}) {
         Object.assign(this.#config, config);
-        return this;
-    }
-
-    /**
-     * Set the location of the script URL for the rendering engine.
-     * @param {string} scriptUrl
-     * @returns {this}
-     */
-    setScriptUrl(scriptUrl) {
-        this.#scriptUrl = scriptUrl;
         return this;
     }
 
@@ -93,16 +81,16 @@ export class Canvas {
             document.querySelectorAll('[id^=' + id + 'output]');
 
         if (outputs.length === 1) {
-            threejsGraphic(outputs[0], data, config, this.#scriptUrl);
+            threejsGraphic(outputs[0], data, cleanCopy(config));
         } else {
             for (let i = 0 ; i < outputs.length ; i ++) {
                 const output = outputs[i];
                 const n = output.id.substring(output.id.indexOf('output') + 6);
-                const c = Array.isArray(config) ? config[i] : JSON.parse(JSON.stringify(config));
+                const c = cleanCopy(Array.isArray(config) ? config[i] : config);
 
                 c.output = n;
                 c.no3DBorder = true;
-                threejsGraphic(output, data[i], c, this.#scriptUrl);
+                threejsGraphic(output, data[i], c);
             }
         }
     }

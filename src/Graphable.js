@@ -1,6 +1,7 @@
 // noinspection JSUnusedGlobalSymbols
 
 import {round} from '@backstrap/math';
+import {cleanCopy} from './helpers';
 import {Coords} from './Coords';
 
 /**
@@ -47,7 +48,7 @@ export class Graphable extends Coords {
      * @returns {Object}
      */
     options() {
-        return JSON.parse(JSON.stringify(this.#options));
+        return cleanCopy(this.#options);
     }
 
     /**
