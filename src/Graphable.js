@@ -91,6 +91,16 @@ export class Graphable extends Coords {
     }
 
     /**
+     * @param {number} [value] - grey value (0-100)
+     * @returns {this}
+     */
+    grey(value = 0) {
+        this.#color.saturation = 0;
+        this.#color.lightness = round(1000*value)/1000;
+        return this.color(hslColor(this.#color));
+    }
+
+    /**
      * @param {number} [hue] - hue as degrees on a color wheel (0-360)
      * @returns {this}
      */

@@ -37,6 +37,22 @@ describe('Graphable', () => {
         });
     });
 
+    describe('grey method', () => {
+        it('returns this', () => {
+            expect(subject.grey(0)).toBe(subject);
+        });
+        it('sets saturation and lightness', () => {
+            subject.grey(0);
+            expect(subject.options().color).toBe('hsl(200,0%,0%)');
+            subject.grey(50);
+            expect(subject.options().color).toBe('hsl(200,0%,50%)');
+        });
+        it('rounds value to 3 decimal places', () => {
+            subject.grey(50.1234);
+            expect(subject.options().color).toBe('hsl(200,0%,50.123%)');
+        });
+    });
+
     describe('hue method', () => {
         it('returns this', () => {
             expect(subject.hue(0)).toBe(subject);

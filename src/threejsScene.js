@@ -126,19 +126,20 @@ export function addSurface(scene, s, a, zMin, zMax)
     case 'standard':
 
       material = new THREE.MeshStandardMaterial( {
-                               color: s.options.color, side: side,
-                               transparent: transparent, opacity: s.options.opacity,
-                               metalness: .5, roughness: .5 } );
+            color: s.options.color, side: side,
+            transparent: transparent, opacity: s.options.opacity,
+            metalness: s.options.metalness >= 0 ? s.options.metalness : .5,
+            roughness: s.options.roughness >= 0 ? s.options.roughness : .5 } );
       break;
 
     case 'phong':
     default:
 
       material = new THREE.MeshPhongMaterial( {
-                               color: s.options.color, side: side,
-                               transparent: transparent, opacity: s.options.opacity,
-                               shininess: 20 } );
-
+            color: s.options.color, side: side,
+            transparent: transparent, opacity: s.options.opacity,
+            shininess: s.options.opacity >= 0 ? s.options.opacity : 20 } );
+      break;
   }
 
   if ( 'colors' in s.options ) {
