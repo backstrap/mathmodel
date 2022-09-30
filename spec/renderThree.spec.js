@@ -1,7 +1,7 @@
 // noinspection ES6PreferShortImport
 
 import {JSDOM} from "jsdom";
-import * as THREE from 'three';
+import {THREE} from './threeFix';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 import {renderThree} from '../src/renderThree';
 

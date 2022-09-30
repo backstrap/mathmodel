@@ -7,6 +7,9 @@ describe('MathModel', () => {
 
     beforeEach(() => {
         subject = new MathModel();
+        jest.spyOn(document, 'getElementById').mockImplementation(() => ({
+            appendChild: () => null
+        }));
     });
 
     afterEach(() => {
@@ -37,6 +40,15 @@ describe('MathModel', () => {
             MathModel.loadMathCells({}, doc);
             expect(doc.defaultView.checkLimits).not.toBe(undefined);
         });
+        it('sets up window onload handler', () => {
+            const doc = {
+                defaultView: {addEventListener: jest.fn().mockImplementation((id, onload) => onload())},
+                getElementsByClassName: jest.fn().mockImplementation(() => [{id: 'test'}]),
+            };
+            // noinspection JSCheckFunctionSignatures
+            MathModel.loadMathCells({test: () => ({run: jest.fn()})}, doc);
+            expect(doc.getElementsByClassName).toHaveBeenCalledTimes(1);
+        });
     });
 
     describe('beforeUpdate method', () => {
@@ -47,22 +59,33 @@ describe('MathModel', () => {
 
     describe('update method', () => {
         it('does nothing', () => {
+            // noinspection JSCheckFunctionSignatures
             expect(subject.update({})).toBe(undefined);
         });
     });
 
     describe('run method', () => {
         it('accepts string', () => {
-            jest.spyOn(document, 'getElementById').mockImplementation(() => ({
-                appendChild: () => null
-            }));
             expect(subject.run('test')).toBe(undefined);
         });
         it('accepts node object', () => {
-            jest.spyOn(document, 'getElementById').mockImplementation(() => ({
-                appendChild: () => null
-            }));
             expect(subject.run({id: 'test'})).toBe(undefined);
+        });
+        it('calls beforeUpdate method', done => {
+            subject.inputs = [
+                {name: 'test'},
+                [{name: 'a'}, {name: 'b'}],
+            ];
+            subject.beforeUpdate = jest.fn().mockImplementation(() => true);
+            subject.update = jest.fn().mockImplementation(() => done());
+            subject.run({id: 'test'});
+            expect(subject.beforeUpdate).toHaveBeenCalledTimes(1);
+            expect(subject.beforeUpdate).toHaveBeenCalledWith({test: undefined, a: undefined, b: undefined});
+        });
+        it('catches beforeUpdate errors', () => {
+            subject.beforeUpdate = jest.fn().mockImplementation(() => { throw new Error('test'); });
+            expect(() => subject.run({id: 'test'})).toThrowError('test');
+            expect(document.getElementById).toHaveBeenCalledTimes(2);
         });
     });
 
