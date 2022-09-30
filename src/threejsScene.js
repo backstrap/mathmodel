@@ -138,7 +138,7 @@ export function addSurface(scene, s, a, zMin, zMax)
       material = new THREE.MeshPhongMaterial( {
             color: s.options.color, side: side,
             transparent: transparent, opacity: s.options.opacity,
-            shininess: s.options.opacity >= 0 ? s.options.opacity : 20 } );
+            shininess: s.options.shininess >= 0 ? s.options.shininess : 20 } );
       break;
   }
 
