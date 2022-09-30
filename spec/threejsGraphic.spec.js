@@ -1,7 +1,9 @@
 // noinspection ES6PreferShortImport
 
-// TODO Impl. threejsGraphic unit tests
 import {threejsGraphic} from '../src/threejsGraphic';
+import {renderThree} from '../src/renderThree';
+
+jest.mock('../src/renderThree');
 
 describe('threejsGraphic', () => {
     afterEach(() => {
@@ -9,6 +11,15 @@ describe('threejsGraphic', () => {
     });
 
     it('dummy test', () => {
+        const output = {children:[
+            {contentWindow: {
+                camera: {position: [0, 0, 0]},
+                xMid: 0, yMid: 0, zMid: 0,
+                dispatchEvent: jest.fn(),
+            }}
+        ]};
+        threejsGraphic(output, [], {});
+
         expect(true).toBeTruthy();
     });
 });

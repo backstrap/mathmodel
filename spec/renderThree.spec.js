@@ -8,6 +8,7 @@ import {renderThree} from '../src/renderThree';
 jest.mock('three/examples/jsm/controls/OrbitControls');
 
 describe('renderThree', () => {
+    let listeners;
     let options;
 
     beforeAll(() => {
@@ -23,6 +24,14 @@ describe('renderThree', () => {
     });
 
     beforeEach(() => {
+        listeners = [];
+        options = {
+            linewidth: 1,
+            opacity: 1,
+            color: 'white',
+            fontSize: 12,
+        };
+        global.requestAnimationFrame = jest.fn();
         jest.spyOn(THREE, 'WebGLRenderer').mockImplementation(() => {
             return {
                 setPixelRatio: jest.fn(),
@@ -41,13 +50,7 @@ describe('renderThree', () => {
                 style: {},
             }
         ));
-        options = {
-            linewidth: 1,
-            opacity: 1,
-            color: 'white',
-            fontSize: 12,
-        };
-        global.requestAnimationFrame = jest.fn();
+        window.addEventListener = jest.fn().mockImplementation((name, f) => listeners.push(f));
     });
 
     afterEach(() => {
@@ -60,17 +63,19 @@ describe('renderThree', () => {
         renderThree({
                 aspectRatio: [1, 1, 1],
                 viewpoint: [1, 0, 0],
+                clippingPlane: [[1, 0, 0], -1],
                 xMin: 0, yMin: 0, zMin: 0,
                 xMax: 1, yMax: 1, zMax: 10,
                 frame: true, axesLabels: true,
-            animate: true,
+                animate: true,
             },
             [], [
                 {point: [0, 0, 0], options: options},
             ], [], [
-                {points: [[1, 1, 1]], options: options},
+                {points: [[1, 1, 1],[]], options: options},
             ], [], window);
         expect(OrbitControls).toHaveBeenCalled();
-        expect(true).toBeTruthy();
+        expect(listeners.length).toBe(8);
+        listeners.forEach(f => f());
     });
 });
