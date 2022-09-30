@@ -6,7 +6,7 @@ describe('Canvas', () => {
     let subject;
 
     beforeEach(() => {
-        subject = new Canvas();
+        subject = new Canvas('test');
     });
 
     afterEach(() => {
@@ -15,6 +15,9 @@ describe('Canvas', () => {
 
     describe('configure method', () => {
         it('returns this', () => {
+            expect(subject.configure()).toBe(subject);
+        });
+        it('can be called with params arg', () => {
             expect(subject.configure({})).toBe(subject);
         });
     });
@@ -47,7 +50,12 @@ describe('Canvas', () => {
                 {id: 'testB', children: []},
             ]);
             subject.add([[], []]);
-            subject.configure([{}, {}]);
+            // Not valid, actually:
+            //subject.configure([{}, {}]);
+            expect(subject.show()).toBe(subject);
+        });
+        it('returns this even with null document', () => {
+            document = undefined;
             expect(subject.show()).toBe(subject);
         });
     });

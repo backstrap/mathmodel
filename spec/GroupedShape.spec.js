@@ -2,6 +2,10 @@
 
 import {GroupedShape} from '../src/GroupedShape';
 
+class Tester extends GroupedShape {
+
+}
+
 describe('GroupedShape', () => {
     afterEach(() => {
         jest.restoreAllMocks();
@@ -12,7 +16,6 @@ describe('GroupedShape', () => {
     });
 
     it('sets its group name using its classname', () => {
-        class Tester extends GroupedShape {};
         expect(new Tester().options().group).toMatch(/^Tester-id\d+$/);
     });
 });

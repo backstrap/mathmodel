@@ -51,6 +51,11 @@ describe('Coords', () => {
         it('returns this', () => {
             expect(subject.rotateTo([1, 0, 0], [1, 2, 3])).toBe(subject);
         });
+        it('is a no-op for bad values', () => {
+            jest.spyOn(subject, 'rotate');
+            subject.rotateTo([1, 0, 0], [0, 0, 0]);
+            expect(subject.rotate).not.toHaveBeenCalled();
+        });
     });
 
     describe('quaternion method', () => {

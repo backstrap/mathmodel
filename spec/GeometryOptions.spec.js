@@ -8,8 +8,9 @@ describe('GeometryOptions', () => {
     });
 
     it('acquires properties from passed constructor arg', () => {
-        const subject = new GeometryOptions({test: 1});
-        expect(Object.keys(subject)).toStrictEqual(['test']);
-        expect(subject.test).toStrictEqual(1);
+        const subject = new GeometryOptions({size: 1});
+        expect(Object.keys(subject)).toStrictEqual(['size']);
+        // noinspection JSUnresolvedVariable
+        expect(subject.size).toStrictEqual(1);
     });
 });

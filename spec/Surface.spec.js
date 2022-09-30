@@ -67,11 +67,28 @@ describe('Surface', () => {
             expect(actual.length).toEqual(5);
             expect(actual[0].constructor.name).toEqual('Geometry');
         });
+        it('may be reversed', () => {
+            const comp = subject.hemisphere(1);
+            const actual = subject.hemisphere(1, true);
+            expect(actual.length).toEqual(5);
+            expect(actual[0].constructor.name).toEqual('Geometry');
+            expect(actual).not.toEqual(comp);
+        });
     });
 
     describe('sphereBand method', () => {
         it('returns Geometry array', () => {
             const actual = subject.sphereBand();
+            expect(actual.length).toEqual(1);
+            expect(actual[0].constructor.name).toEqual('Geometry');
+        });
+        it('can have functional angle arg', () => {
+            const actual = subject.sphereBand(1, u => u);
+            expect(actual.length).toEqual(1);
+            expect(actual[0].constructor.name).toEqual('Geometry');
+        });
+        it('may be reversed', () => {
+            const actual = subject.sphereBand(1, 6, 3, 0, true);
             expect(actual.length).toEqual(1);
             expect(actual[0].constructor.name).toEqual('Geometry');
         });
