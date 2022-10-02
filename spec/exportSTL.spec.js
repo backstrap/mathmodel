@@ -21,14 +21,29 @@ describe('exportSTL', () => {
     });
 
     it('acts on surfaces', () => {
-        const data = [new Geometry({type: 'surface',options:{color:'white',opacity:1},vertices:[],faces:[]})];
+        const data = [new Geometry({
+            type: 'surface',
+            faces: [[0, 1, 2]],
+            vertices: [[0, 0, 0], [1, 0, 0], [0, 1, 0]],
+            options: {color: 'white', opacity: 1},
+        })];
         const config = {
-            aspectRatio:[1,1,1],
+            aspectRatio:[1, 1, 1],
             xMin: 0, yMin: 0, zMin: 0,
-            xMax: 1, yMax: 1, zMax: 10,
+            xMax: 1, yMax: 1, zMax: 1,
         };
 
         expect(exportSTL(data, false, config))
-            .toStrictEqual('solid exported\nendsolid exported\n');
+            .toStrictEqual(
+                'solid exported\n'
+                + '\tfacet normal 0 0 1\n'
+                + '\t\touter loop\n'
+                + '\t\t\tvertex 0 0 0\n'
+                + '\t\t\tvertex 1 0 0\n'
+                + '\t\t\tvertex 0 1 0\n'
+                + '\t\tendloop\n'
+                + '\tendfacet\n'
+                + 'endsolid exported\n'
+            );
     });
 });

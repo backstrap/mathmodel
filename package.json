@@ -35,6 +35,7 @@
     "babel-jest": "^27.5.1",
     "babel-plugin-module-resolver": "^4.1.0",
     "jest-cli": "^27.5.1",
+    "jest-matcher-deep-close-to": "^3.0.2",
     "jsdoc": "^3.6.10",
     "jsdom": "^16.6.0",
     "source-map-support": "^0.5.21",
@@ -71,7 +72,7 @@
     "testEnvironment": "node",
     "coverageDirectory": "<rootDir>/coverage",
     "collectCoverageFrom": [
-        "src/{!(index|thin),}.js"
+      "src/{!(index|thin),}.js"
     ],
     "coverageReporters": [
       "text",
@@ -82,14 +83,14 @@
       "JSON"
     ],
     "setupFiles": [
-        "<rootDir>/spec/setup.js"
+      "<rootDir>/spec/setup.js"
     ],
     "roots": [
       "<rootDir>/src",
       "<rootDir>/spec"
     ],
     "moduleNameMapper": {
-        "^three/examples/jsm/[a-z]*/(.*)": "<rootDir>/three/$1"
+      "^three/examples/jsm/[a-z]*/(.*)": "<rootDir>/three/$1"
     },
     "moduleFileExtensions": [
       "js"

@@ -35,6 +35,7 @@ export class Canvas {
      * @returns {this}
      */
     configure(config = {}) {
+        // TODO Consider support for multiple configs, with multiple outputs.
         Object.assign(this.#config, config);
         return this;
     }
