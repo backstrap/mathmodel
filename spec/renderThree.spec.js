@@ -58,8 +58,10 @@ describe('renderThree', () => {
     });
 
     it('dummy test', () => {
+        window.document.body.append(document.createElement('canvas'));
         window.devicePixelRatio = 1;
         window.innerWidth = window.innerHeight = 1000;
+        // Should actually mock threejsScene functions and scene.children.
         renderThree({
                 aspectRatio: [1, 1, 1],
                 viewpoint: [1, 0, 0],
@@ -69,11 +71,22 @@ describe('renderThree', () => {
                 frame: true, axesLabels: true,
                 animate: true,
             },
-            [], [
+            [
+                {color: 'white', position: [1, 1, 1]}
+            ], [
                 {point: [0, 0, 0], options: options},
             ], [], [
-                {points: [[1, 1, 1],[]], options: options},
-            ], [], window);
+                {points: [[1, 1, 1], [], [2, 2, 2]], options: options},
+            ], [{
+                faces: [],
+                vertices: [],
+                options: Object.assign({
+                    rotation: {axis: [1, 0, 0], angle: 1},
+                    translation: {path: () => 1, step: 1},
+                    mogrifyMax: 10,
+                    mogrifyStep: 0,
+                }, options)
+            }], window);
         expect(OrbitControls).toHaveBeenCalled();
         expect(listeners.length).toBe(8);
         listeners.forEach(f => f());

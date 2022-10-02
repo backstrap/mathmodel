@@ -57,5 +57,58 @@ describe('threejsScene', () => {
                 [1, 0, 0], -1, 1)
             expect(scene.add).toHaveBeenCalled();
         });
+        it('removes bad vertices', () => {
+            const surface = {
+                faces: [[0, 1, 2], [0, 1, 3]],
+                vertices: [[0, 0, 0], [1, 1, 1], [2, 0, 0], [0, 0, NaN]],
+                options: {
+                    material: 'normal',
+                    linewidth: 1,
+                    opacity: 1,
+                }
+            };
+            addSurface(scene, surface,
+                [1, 0, 0], -1, 1)
+            expect(surface.faces.length).toBe(1);
+        });
+        it('sets std material', () => {
+            const surface = {
+                faces: [[0, 1, 2]],
+                vertices: [[0, 0, 0], [1, 1, 1], [2, 0, 0]],
+                options: Object.assign(options, {material: 'standard'})
+            };
+            addSurface(scene, surface,
+                [1, 0, 0], -1, 1)
+            expect(surface.faces.length).toBe(1);
+        });
+        it('sets "mogrify" animation', () => {
+            const surface = {
+                faces: [[0, 1, 2]],
+                vertices: [[0, 0, 0], [1, 1, 1], [2, 0, 0]],
+                options: Object.assign(options, {
+                    mogrifyStep: 0,
+                    mogrifyMax: 10,
+                })
+            };
+            addSurface(scene, surface,
+                [1, 0, 0], -1, 1)
+            expect(surface.faces.length).toBe(1);
+        });
+        it('sets "mogrify" animation without group', () => {
+            const surface = {
+                faces: [[0, 1, 2]],
+                vertices: [[0, 0, 0], [1, 1, 1], [2, 0, 0]],
+                options: {
+                    linewidth: 1,
+                    opacity: 1,
+                    color: 'white',
+                    mogrifyStep: 0,
+                    mogrifyMax: 10,
+                }
+            };
+            addSurface(scene, surface,
+                [1, 0, 0], -1, 1)
+            expect(surface.faces.length).toBe(1);
+        });
     });
 });
