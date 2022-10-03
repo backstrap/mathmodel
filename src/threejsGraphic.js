@@ -1,7 +1,25 @@
 import {canonicalizeConfig, cleanCopy} from './helpers';
 import {renderThree} from './renderThree';
 
-/* IOSFix() code taken from @backstrap/mathcell/src/core.js */
+const renderers = {};
+
+/**
+ * @type {function(string, Window)}
+ * @param {string} id - id of the renderer
+ * @param {Window} cw - the contentWindow to pass to the renderer
+ */
+const startOutput = (id, cw) => {
+    if (renderers[id]) {
+        renderers[id](cw);
+        renderers[id] = null;
+    }
+};
+
+/**
+ * IOSFix() code taken from @backstrap/mathcell/src/core.js
+ * @type {function(Node)}
+ * @param {Node} output
+ */
 const iOSFix = output => {
     const iframe = output.children[0];
 
@@ -11,22 +29,11 @@ const iOSFix = output => {
     }
 };
 
-const renderers = {};
-
-if (typeof window !== 'undefined') {
-    window.startOutput = (id, cw) => {
-        if (renderers[id]) {
-            renderers[id](cw);
-            renderers[id] = null;
-        }
-    }
-}
-
 /* threejsGraphic() based on @backstrap/mathcell:src/render/threejs.js */
 /**
  * Either creates an iframe if needed,
  * or else re-runs the renderThree() function
- * on the appropriate iframe's content window,
+ * on the appropriate iframe's contentWindow,
  * to render with the given data and config.
  * @param {Node} output - an HTML Element on the page
  * @param {Geometry[]} data - graphic objects to be drawn
@@ -78,6 +85,10 @@ export function threejsGraphic(output, data, config) {
     </script>
   </body>
 </html>`.replace(/"/g, '&quot;');
+
+    if (typeof window !== 'undefined') {
+      window.startOutput = startOutput;
+    }
 
     renderers[output.id] = cw => renderThree(config, lights, texts, points, lines, surfaces, cw);
     // noinspection JSUndefinedPropertyAssignment

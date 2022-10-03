@@ -21,14 +21,8 @@ export function canonicalizeConfig(config, data, texts, points, lines, surfaces)
     const d = data[j];
     if (d.type === 'text') texts.push(d);
     if (d.type === 'point') points.push(d);
-    if (d.type === 'line') {
-      d.points = roundTo(d.points, 3, false); // reduce raw data size
-      lines.push(d);
-    }
-    if (d.type === 'surface') {
-      d.vertices = roundTo(d.vertices, 3, false); // reduce raw data size
-      surfaces.push(d);
-    }
+    if (d.type === 'line') lines.push(d);
+    if (d.type === 'surface') surfaces.push(d);
   }
 
   const all = [];
