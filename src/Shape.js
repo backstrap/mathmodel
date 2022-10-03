@@ -43,7 +43,7 @@ export class Shape extends Graphable {
      * @returns {Geometry[]}
      */
     curve(f, u) {
-        return this.#objectify(parametric((s) => this.transform(f(s)), u, this.options()));
+        return this.#objectify(parametric(s => this.transform(f(s)), u, this.options()));
     }
 
     /**

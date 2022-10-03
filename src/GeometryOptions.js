@@ -1,12 +1,12 @@
 /**
  * @typedef {Object} rotationOption
- * @property {number[]} axis
- * @property {number} angle
+ * @property {number[]} [axis]
+ * @property {number} [angle]
  * @property {number[]} [origin]
  */
 /**
  * @typedef {Object} translationOption
- * @property {string|function(number):number[]} path
+ * @property {string|function(number):number[]} [path]
  * @property {number} [step]
  */
 /**
@@ -14,6 +14,11 @@
  * @property {number} r
  * @property {number} g
  * @property {number} b
+ */
+/**
+ * @typedef {Object} geometrySubOptions
+ * @property {rotationOption} [rotation]
+ * @property {translationOption} [translation]
  */
 /**
  * @typedef {Object} geometryOptions

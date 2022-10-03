@@ -2,6 +2,11 @@
 
 import {Solid} from '../src/Solid';
 
+const expectSurface = obj => (
+    expect(obj.constructor.name).toEqual('Geometry')
+    && expect(obj).toMatchObject({type: 'surface', faces: expect.any(Array)})
+);
+
 describe('Solid', () => {
     let subject;
 
@@ -17,7 +22,7 @@ describe('Solid', () => {
         it('returns Geometry array', () => {
             const actual = subject.block();
             expect(actual.length).toEqual(6);
-            expect(actual[0].constructor.name).toEqual('Geometry');
+            actual.forEach(obj => expectSurface(obj));
         });
     });
 
@@ -25,7 +30,7 @@ describe('Solid', () => {
         it('returns Geometry array', () => {
             const actual = subject.rod();
             expect(actual.length).toEqual(3);
-            expect(actual[0].constructor.name).toEqual('Geometry');
+            actual.forEach(obj => expectSurface(obj));
         });
     });
 
@@ -33,7 +38,7 @@ describe('Solid', () => {
         it('returns Geometry array', () => {
             const actual = subject.cone();
             expect(actual.length).toEqual(2);
-            expect(actual[0].constructor.name).toEqual('Geometry');
+            actual.forEach(obj => expectSurface(obj));
         });
     });
 
@@ -41,7 +46,7 @@ describe('Solid', () => {
         it('returns Geometry array', () => {
             const actual = subject.sphere();
             expect(actual.length).toEqual(6);
-            expect(actual[0].constructor.name).toEqual('Geometry');
+            actual.forEach(obj => expectSurface(obj));
         });
     });
 
@@ -49,7 +54,7 @@ describe('Solid', () => {
         it('returns Geometry array', () => {
             const actual = subject.torus();
             expect(actual.length).toEqual(1);
-            expect(actual[0].constructor.name).toEqual('Geometry');
+            actual.forEach(obj => expectSurface(obj));
         });
     });
 });

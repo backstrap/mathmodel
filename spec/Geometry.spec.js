@@ -58,8 +58,9 @@ describe('Geometry', () => {
     });
 
     it('fails on unknown geometry type', () => {
-        jest.spyOn(console, 'log').mockImplementation(() => undefined);
+        jest.spyOn(console, 'warn').mockImplementation(() => undefined);
         expect(() => new Geometry({type: 'test'}))
             .toThrow('Unknown Geometry type: test');
+        expect(console.warn).toHaveBeenCalledTimes(1);
     });
 });

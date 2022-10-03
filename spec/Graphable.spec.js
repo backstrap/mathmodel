@@ -3,6 +3,7 @@
 import {Graphable} from '../src/Graphable';
 
 describe('Graphable', () => {
+    /** @type {Graphable} */
     let subject;
 
     beforeEach(() => {
@@ -17,17 +18,32 @@ describe('Graphable', () => {
         it('returns an options object with a default color', () => {
             expect(subject.options()).toStrictEqual({"color": "hsl(200,95%,50%)"});
         });
+        it('returns a new copy each time', () => {
+            expect(subject.options()).not.toBe(subject.options());
+        });
     });
 
     describe('setOptions method', () => {
         it('returns this', () => {
-            expect(subject.setOptions({test: 'test'})).toBe(subject);
+            expect(subject.setOptions({opacity: 0.5})).toBe(subject);
+        });
+        it('changes option values', () => {
+            const opts = {opacity: 0.5};
+            expect(subject.options()).not.toMatchObject(opts);
+            subject.setOptions(opts);
+            expect(subject.options()).toMatchObject(opts);
         });
     });
 
     describe('setSubOptions method', () => {
         it('returns this', () => {
-            expect(subject.setSubOptions({test: {test: 'test'}})).toBe(subject);
+            expect(subject.setSubOptions({translation: {step: 1}})).toBe(subject);
+        });
+        it('changes option values', () => {
+            const opts = {translation: {step: 1}};
+            expect(subject.options()).not.toMatchObject(opts);
+            subject.setOptions(opts);
+            expect(subject.options()).toMatchObject(opts);
         });
     });
 
@@ -35,11 +51,23 @@ describe('Graphable', () => {
         it('returns this', () => {
             expect(subject.opacity(0)).toBe(subject);
         });
+        it('changes the opacity', () => {
+            const opts = {opacity: 0.5};
+            expect(subject.options()).not.toMatchObject(opts);
+            subject.opacity(opts.opacity);
+            expect(subject.options()).toMatchObject(opts);
+        });
     });
 
     describe('color method', () => {
         it('returns this', () => {
             expect(subject.color('#ffffff')).toBe(subject);
+        });
+        it('changes the color', () => {
+            const opts = {color: 'blue'};
+            expect(subject.options()).not.toMatchObject(opts);
+            subject.color(opts.color);
+            expect(subject.options()).toMatchObject(opts);
         });
     });
 

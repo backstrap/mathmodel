@@ -1,15 +1,12 @@
 // noinspection ES6PreferShortImport
 
-import {toBeDeepCloseTo} from 'jest-matcher-deep-close-to';
 import {pi} from '@backstrap/math';
 import {Coords} from '../src/Coords';
 
+const approx = arr => arr.map(x => expect.closeTo(x, 10));
+
 describe('Coords', () => {
     let subject;
-
-    beforeAll(() => {
-        expect.extend({toBeDeepCloseTo});
-    })
 
     beforeEach(() => {
         subject = new Coords();
@@ -60,15 +57,15 @@ describe('Coords', () => {
         });
         it('rotates around x axis by default', () => {
             expect(subject.rotate().transform([1, 1, 1])).toEqual([1, 1, 1]);
-            expect(subject.rotate(pi).transform([1, 2, 3])).toBeDeepCloseTo([1, -2, -3], 10);
+            expect(subject.rotate(pi).transform([1, 2, 3])).toEqual(approx([1, -2, -3]));
         });
         it('rotates around y', () => {
             expect(subject.rotate().transform([1, 1, 1])).toEqual([1, 1, 1]);
-            expect(subject.rotate(pi, 1).transform([1, 2, 3])).toBeDeepCloseTo([-1, 2, -3], 10);
+            expect(subject.rotate(pi, 1).transform([1, 2, 3])).toEqual(approx([-1, 2, -3]));
         });
         it('rotates around z', () => {
             expect(subject.rotate().transform([1, 1, 1])).toEqual([1, 1, 1]);
-            expect(subject.rotate(pi/2, 2).transform([1, 2, 3])).toBeDeepCloseTo([-2, 1, 3], 10);
+            expect(subject.rotate(pi/2, 2).transform([1, 2, 3])).toEqual(approx([-2, 1, 3]));
         });
     });
 
@@ -79,7 +76,7 @@ describe('Coords', () => {
         it('rotates the axes', () => {
             subject.rotateTo([1, 2, 3], [3, 2, 1]);
             expect(subject.transform([1, 2, 3]))
-                .toBeDeepCloseTo([3, 2, 1], 10);
+                .toEqual(approx([3, 2, 1]));
         });
         it('is a no-op for bad values', () => {
             jest.spyOn(subject, 'rotate');
@@ -96,7 +93,7 @@ describe('Coords', () => {
         it('rotates the axes', () => {
             subject.quaternion([1, 2, 3, 4]);
             expect(subject.transform([1, 2, 3]))
-                .toBeDeepCloseTo([1.8, 2, 2.6], 10);
+                .toEqual(approx([1.8, 2, 2.6]));
         });
     });
 

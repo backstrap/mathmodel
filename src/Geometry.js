@@ -59,7 +59,7 @@ export class Geometry {
                 break;
 
             default:
-                console.log(data);
+                console.warn(data);
                 throw new Error('Unknown Geometry type: ' + data.type);
         }
     }

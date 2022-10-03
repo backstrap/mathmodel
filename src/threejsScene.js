@@ -173,7 +173,7 @@ function handleAnimationOptions(options, mesh, group) {
   if ( options.rotationAxisAngle ) {
     options.rotation = { axis: options.rotationAxisAngle[0],
                            angle: options.rotationAxisAngle[1] }
-    console.log( 'rotationAxisAngle is deprecated: see documentation for new format' );
+    console.warn( 'rotationAxisAngle is deprecated: see documentation for new format' );
   }
 
   // to be removed
@@ -181,7 +181,7 @@ function handleAnimationOptions(options, mesh, group) {
   if ( options.rotationOrigin ) {
     // noinspection JSUnresolvedVariable
     (options.rotation||{}).origin = options.rotationOrigin;
-    console.log( 'rotationOrigin is deprecated: see documentation for new format' );
+    console.warn( 'rotationOrigin is deprecated: see documentation for new format' );
   }
 
   if ( options.rotation ) {

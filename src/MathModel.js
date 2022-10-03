@@ -98,7 +98,7 @@ export class MathModel {
                 if (Model) {
                     new Model(cell.id).run(cell);
                 } else {
-                    console.log('Unknown model id "' + cell.id + '"');
+                    console.warn('Unknown model id "' + cell.id + '"');
                 }
             }
         });

@@ -1,6 +1,5 @@
 // noinspection ES6PreferShortImport
 
-// TODO Impl. helpers unit tests
 import {canonicalizeConfig, cleanCopy} from '../src/helpers';
 
 describe('canonicalizeConfig', () => {

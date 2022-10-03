@@ -35,7 +35,6 @@ export class Canvas {
      * @returns {this}
      */
     configure(config = {}) {
-        // TODO Consider support for multiple configs, with multiple outputs.
         Object.assign(this.#config, config);
         return this;
     }
@@ -87,7 +86,9 @@ export class Canvas {
             for (let i = 0 ; i < outputs.length ; i ++) {
                 const output = outputs[i];
                 const n = output.id.substring(output.id.indexOf('output') + 6);
-                const c = cleanCopy(Array.isArray(config) ? config[i] : config);
+                // TODO Consider adding support for multiple configs, with multiple outputs.
+                //const c = cleanCopy(Array.isArray(config) ? config[i] : config);
+                const c = cleanCopy( config);
 
                 c.output = n;
                 c.no3DBorder = true;

@@ -24,6 +24,7 @@ const hslColor = function ({hue, saturation, lightness}) {
  * @extends Coords
  */
 export class Graphable extends Coords {
+    /** @type {geometryOptions} */
     #options = {
         color: 'hsl(200,95%,50%)',
     };
@@ -45,14 +46,14 @@ export class Graphable extends Coords {
 
     /**
      * Returns a deep clone of the options object.
-     * @returns {Object}
+     * @returns {geometryOptions}
      */
     options() {
         return cleanCopy(this.#options);
     }
 
     /**
-     * @param {Object} options
+     * @param {geometryOptions} options
      * @returns {this}
      */
     setOptions(options) {
@@ -62,7 +63,7 @@ export class Graphable extends Coords {
 
     /**
      * Should only be given settings for object-valued options.
-     * @param {Object} options
+     * @param {geometrySubOptions} options
      * @returns {this}
      */
     setSubOptions(options) {

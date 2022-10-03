@@ -1,6 +1,5 @@
 // noinspection ES6PreferShortImport
 
-// TODO Impl. threejsScene unit tests
 import {addPoint, addLine, addSurface} from '../src/threejsScene';
 
 describe('threejsScene', () => {
@@ -67,8 +66,7 @@ describe('threejsScene', () => {
                     opacity: 1,
                 }
             };
-            addSurface(scene, surface,
-                [1, 0, 0], -1, 1)
+            addSurface(scene, surface, [1, 0, 0], -1, 1)
             expect(surface.faces.length).toBe(1);
         });
         it('sets std material', () => {
@@ -77,8 +75,7 @@ describe('threejsScene', () => {
                 vertices: [[0, 0, 0], [1, 1, 1], [2, 0, 0]],
                 options: Object.assign(options, {material: 'standard'})
             };
-            addSurface(scene, surface,
-                [1, 0, 0], -1, 1)
+            addSurface(scene, surface, [1, 0, 0], -1, 1)
             expect(surface.faces.length).toBe(1);
         });
         it('sets "mogrify" animation', () => {
@@ -90,8 +87,7 @@ describe('threejsScene', () => {
                     mogrifyMax: 10,
                 })
             };
-            addSurface(scene, surface,
-                [1, 0, 0], -1, 1)
+            addSurface(scene, surface, [1, 0, 0], -1, 1)
             expect(surface.faces.length).toBe(1);
         });
         it('sets "mogrify" animation without group', () => {
@@ -106,9 +102,23 @@ describe('threejsScene', () => {
                     mogrifyMax: 10,
                 }
             };
-            addSurface(scene, surface,
-                [1, 0, 0], -1, 1)
+            addSurface(scene, surface, [1, 0, 0], -1, 1)
             expect(surface.faces.length).toBe(1);
+        });
+        it('warns about deprecated options', () => {
+            jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+            const surface = {
+                faces: [[0, 1, 2]],
+                vertices: [[0, 0, 0], [1, 1, 1], [2, 0, 0]],
+                options: Object.assign({rotationAxisAngle: [[1, 0, 0], 1]}, options),
+            };
+            addSurface(scene, surface, [1, 0, 0], -1, 1)
+            expect(console.warn).toHaveBeenCalledTimes(1);
+            expect(console.warn).toHaveBeenCalledWith(expect.stringContaining('rotationAxisAngle is deprecated'));
+            surface.options = Object.assign({rotationOrigin: [0, 0, 0]}, options);
+            addSurface(scene, surface, [1, 0, 0], -1, 1)
+            expect(console.warn).toHaveBeenCalledTimes(2);
+            expect(console.warn).toHaveBeenCalledWith(expect.stringContaining('rotationOrigin is deprecated'));
         });
     });
 });
