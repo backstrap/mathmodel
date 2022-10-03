@@ -1,6 +1,5 @@
 // noinspection ES6PreferShortImport
 
-import {JSDOM} from 'jsdom';
 import {renderThree} from '../src/renderThree';
 import {threejsGraphic} from '../src/threejsGraphic';
 

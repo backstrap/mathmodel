@@ -6,6 +6,7 @@ import {addSurface} from '../src/threejsScene';
 
 jest.mock('../src/threejsScene', () => {
     const actual = jest.requireActual('../src/threejsScene');
+    // noinspection JSCheckFunctionSignatures
     return {
         __esModule: true,
         addSurface: jest.fn((...args) => actual.addSurface(...args)),

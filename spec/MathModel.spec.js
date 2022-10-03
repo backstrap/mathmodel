@@ -7,6 +7,7 @@ describe('MathModel', () => {
 
     beforeEach(() => {
         subject = new MathModel();
+        // noinspection JSUnusedGlobalSymbols
         jest.spyOn(document, 'getElementById').mockImplementation(() => ({
             appendChild: () => null
         }));
@@ -36,6 +37,8 @@ describe('MathModel', () => {
             delete window.checkLimits;
         });
         it('uses global window if doc has none', () => {
+            // noinspection JSUnusedGlobalSymbols,JSValidateTypes
+            /** @type {Document} */
             const doc = {getElementsByClassName: () => []};
             expect(window.checkLimits).toBe(undefined);
             MathModel.loadMathCells({}, doc);
@@ -108,7 +111,7 @@ describe('MathModel', () => {
         it('generates id for node if needed', () => {
             const node = {};
             subject.run(node);
-            expect(node.id).toMatch(/^id[0-9]+$/);
+            expect(node.id).toMatch(/^id\d+$/);
         });
         it('calls beforeUpdate method', done => {
             subject.inputs = [
