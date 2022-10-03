@@ -26,7 +26,7 @@
   "dependencies": {
     "@backstrap/math": "^1.4.9-a",
     "@backstrap/mathcell": "^1.10.0-a",
-    "three": "^0.139.2"
+    "three": "^0.143.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.17.6",

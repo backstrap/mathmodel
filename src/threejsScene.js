@@ -149,7 +149,7 @@ export function addSurface(scene, s, a, zMin, zMax)
       colors.push( c.r, c.g, c.b );
     }
     geometry.setAttribute( 'color', new THREE.Float32BufferAttribute( colors, 3 ) );
-    material.vertexColors = THREE.VertexColors;
+    material.vertexColors = true;
     material.color.set( 'white' ); // crucial!
   }
 
