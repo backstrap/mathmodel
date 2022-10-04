@@ -56,6 +56,33 @@ describe('exportSTL', () => {
             );
     });
 
+    it('rounds vector and normal data', () => {
+        const data = [new Geometry({
+            type: 'surface',
+            faces: [[0, 1, 2]],
+            vertices: [[0, 0, 0.12345], [1, 0, 0], [0, 1, 0]],
+            options: {color: 'white', opacity: 1},
+        })];
+        const config = {
+            aspectRatio:[1, 1, 1],
+            xMin: 0, yMin: 0, zMin: 0,
+            xMax: 1, yMax: 1, zMax: 1,
+            decimals: 2,
+        };
+        expect(exportSTL(data, false, config))
+            .toStrictEqual(
+                'solid exported\n'
+                + '\tfacet normal 0.12 0.12 0.99\n'
+                + '\t\touter loop\n'
+                + '\t\t\tvertex 0 0 0.12\n'
+                + '\t\t\tvertex 1 0 0\n'
+                + '\t\t\tvertex 0 1 0\n'
+                + '\t\tendloop\n'
+                + '\tendfacet\n'
+                + 'endsolid exported\n'
+            );
+    });
+
     it('scales z axis appropriately', () => {
         const config = {
             aspectRatio:[1, 1, 1],
