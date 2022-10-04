@@ -13,6 +13,15 @@ import {addPoint, addLine, addSurface} from './threejsScene';
  * In addition to defining the renderThree() function,
  * this module also sets event listeners on the passed window object, if they have not already been set,
  * and defines/updates certain variables on the passed window object: camera, listeners, xMid, yMid, and zMid.
+ *
+ * @param {renderConfig} config
+ * @param {Object} lights
+ * @param {Geometry[]} texts
+ * @param {Geometry[]} points
+ * @param {Geometry[]} lines
+ * @param {Geometry[]} surfaces
+ * @param {Window} window
+ * @private
  */
 export function renderThree(config, lights, texts, points, lines, surfaces, window) {
 const document = window.document;

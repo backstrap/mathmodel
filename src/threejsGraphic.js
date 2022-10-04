@@ -7,6 +7,7 @@ const renderers = {};
  * @type {function(string, Window)}
  * @param {string} id - id of the renderer
  * @param {Window} cw - the contentWindow to pass to the renderer
+ * @private
  */
 const startOutput = (id, cw) => {
     if (renderers[id]) {
@@ -19,6 +20,7 @@ const startOutput = (id, cw) => {
  * IOSFix() code taken from @backstrap/mathcell/src/core.js
  * @type {function(Node)}
  * @param {Node} output
+ * @private
  */
 const iOSFix = output => {
     const iframe = output.children[0];
