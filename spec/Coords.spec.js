@@ -3,6 +3,7 @@
 import {pi} from '@backstrap/math';
 import {Coords} from '../src/Coords';
 
+// noinspection JSUnresolvedFunction
 const approx = arr => arr.map(x => expect.closeTo(x, 10));
 
 describe('Coords', () => {

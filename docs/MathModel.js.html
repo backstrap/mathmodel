@@ -49,12 +49,12 @@ import {Canvas} from './Canvas';
  * @property {number}              [yMax]
  * @property {number}              [zMax]
  * @property {number[]}            [aspectRatio]
- * @property {number[]}            [viewpoint]
- * @property {number[]}            [viewDistance]
+ * @property {number[]|string}     [viewpoint]
+ * @property {number|string}       [viewDistance]
  * @property {number[]|number[][]} [clippingPlane]
  * @property {string}              [ambientLight]
  * @property {string}              [clearColor]
- * @property {string[]}            [axesLabel]
+ * @property {string[]}            [axesLabels]
  */
 /**
  * @typedef {Object} baseConfig
@@ -83,7 +83,7 @@ import {Canvas} from './Canvas';
  * @type {function(string): HTMLElement}
  * @private
  */
-const getNode = (id => document.getElementById(id));
+const getElement = (id => document.getElementById(id));
 
 /**
  * Class representing a MathCell graphic.
@@ -147,23 +147,23 @@ export class MathModel {
     update(params) { }
 
     /**
-     * Build an interactive Math Cell in a DOM node.
+     * Build an interactive Math Cell in a DOM Element.
      *
-     * @param {HTMLElement|string} node - A DOM node, or the id of one.
+     * @param {HTMLElement|string} element - A DOM Element, or the id of one.
      */
-    run(node) {
-        let id = node;
+    run(element) {
+        let id = element;
         let first = true;
 
         if (typeof id === 'string' || id instanceof String) {
-            node = getNode(id);
+            element = getElement(id);
         } else {
-            id = node.id || (node.id = generateId());
+            id = element.id || (element.id = generateId());
         }
 
         this.canvas = new Canvas(id, this.config);
         MathCell(id, this.inputs);
-        node.update = (id => {
+        element.update = (id => {
             try {
                 const values = this.#getValues(id, this.inputs);
 
@@ -187,7 +187,7 @@ export class MathModel {
                 throw e;
             }
         });
-        node.update(id);
+        element.update(id);
     }
 
     /**

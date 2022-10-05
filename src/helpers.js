@@ -1,4 +1,4 @@
-import {dataReplacer, dataReviver, roundTo, minMax, colormap} from '@backstrap/mathcell';
+import {dataReplacer, dataReviver, minMax, colormap} from '@backstrap/mathcell';
 
 export function canonicalizeConfig(config, data, texts, points, lines, surfaces)
 {

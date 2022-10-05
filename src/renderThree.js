@@ -217,6 +217,7 @@ window.listeners = {
 
 for ( let i = 0 ; i < texts.length ; i++ ) {
   const t = texts[i];
+  // noinspection JSUnresolvedVariable
   addLabel( t.text, t.point[0], t.point[1], t.point[2], t.options.color, t.options.fontSize );
 }
 

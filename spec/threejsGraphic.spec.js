@@ -71,7 +71,7 @@ describe('threejsGraphic', () => {
 
     it('runs in windowless environment', () => {
         // noinspection JSValidateTypes
-        /** @type {Node} */
+        /** @type {HTMLElement} */
         const output = {id: 'test', children:[{}]};
         const win = window;
         delete global.window;
@@ -81,7 +81,7 @@ describe('threejsGraphic', () => {
 
     it('calls getComputedStyle for Apple devices', () => {
         // noinspection JSValidateTypes
-        /** @type {Node} */
+        /** @type {HTMLElement} */
         const output = {id: 'test', children:[{style: {}}]};
         global.getComputedStyle = jest.fn().mockImplementation(
             () => ({width: 100, height: 100})
@@ -94,7 +94,7 @@ describe('threejsGraphic', () => {
 
     it('does not call getComputedStyle for non-Apple devices', () => {
         // noinspection JSValidateTypes
-        /** @type {Node} */
+        /** @type {HTMLElement} */
         const output = {id: 'test', children:[{style: {}}]};
         global.getComputedStyle = jest.fn();
         threejsGraphic(output, [], {});

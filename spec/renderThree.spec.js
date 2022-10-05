@@ -144,6 +144,7 @@ describe('renderThree', () => {
 
     it('renders the scene', () => {
         // Should actually mock threejsScene functions and scene.children.
+        // noinspection JSCheckFunctionSignatures
         renderThree(baseConfig,
             [
                 {color: 'white', position: [1, 1, 1]},
@@ -177,6 +178,7 @@ describe('renderThree', () => {
             points: [[], [0, 0, 0], [1, 0, 0], [], [1, 0, 0], [2, 0, 0]],
             options: options,
         }];
+        // noinspection JSCheckFunctionSignatures
         renderThree(baseConfig, [], [], [], lines, [], window);
         expect(lines.length).toBe(3);
     });
@@ -186,6 +188,7 @@ describe('renderThree', () => {
             points: [[0, 0, 0], [1, 0, 0], [99, 99, 99], [0, 1, 0], [0, 0, 1]],
             options: options,
         }];
+        // noinspection JSCheckFunctionSignatures
         renderThree(baseConfig, [], [], [], lines, [], window);
         expect(lines.length).toBe(2);
     });

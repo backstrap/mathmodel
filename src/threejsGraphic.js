@@ -18,8 +18,8 @@ const startOutput = (id, cw) => {
 
 /**
  * IOSFix() code taken from @backstrap/mathcell/src/core.js
- * @type {function(Node)}
- * @param {Node} output
+ * @type {function(HTMLElement)}
+ * @param {HTMLElement} output
  * @private
  */
 const iOSFix = output => {
@@ -37,7 +37,7 @@ const iOSFix = output => {
  * or else re-runs the renderThree() function
  * on the appropriate iframe's contentWindow,
  * to render with the given data and config.
- * @param {Node} output - an HTML Element on the page
+ * @param {HTMLElement} output - an HTML Element on the page
  * @param {Geometry[]} data - graphic objects to be drawn
  * @param {renderConfig} config - a rendering configuration
  * @private
