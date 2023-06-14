@@ -120,6 +120,34 @@ export class Solid extends Shape {
             r2*sin(v)
         ], uvRange, uvRange);
     }
+
+    /**
+     * Generate the surface of a general parametric volume.
+     * The default arguments produce a properly oriented unit cube.
+     * If drawing "single-sided", note that
+     * the function f naturally parametrizes the interior
+     * of the volume, oriented with right-hand-rule,
+     * so the "upward-facing" normals to the surface g(u, v) = f(u, v, k)
+     * are outward-facing when k = w[1] (not k = w[0]).
+     *
+     * @param {function} [f] - parameterization of the volume
+     * @param {number[]} [u] - [start, end, step] for u parameter (default [0, 1, 1])
+     * @param {number[]} [v] - [start, end, step] for v parameter (default [0, 1, 1])
+     * @param {number[]} [w] - [start, end, step] for w parameter (default [0, 1, 1])
+     * @returns {Geometry[]}
+     */
+    volume(f = (...v) => v, u = [0, 1, 1], v = [0, 1, 1], w = [0, 1, 1]) {
+        const backward = ([start, end, steps]) => [end, start, steps];
+
+        return [
+            this.surface((s, t) => f(s, t, w[0]), u, backward(v)),
+            this.surface((s, t) => f(s, t, w[1]), u, v),
+            this.surface((s, t) => f(s, v[0], t), u, w),
+            this.surface((s, t) => f(s, v[1], t), backward(u), w),
+            this.surface((s, t) => f(u[0], s, t), v, backward(w)),
+            this.surface((s, t) => f(u[1], s, t), v, w),
+        ].flat();
+    }
 }
 </code></pre>
         </article>
