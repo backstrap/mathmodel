@@ -120,4 +120,34 @@ export class Solid extends Shape {
             this.surface((s, t) => f(u[1], s, t), v, w),
         ].flat();
     }
+
+    /**
+     * Generate the surface of an extruded convex polygon.
+     * The polygon is drawn in the x-y plane, and extruded along the z-axis.
+     * The default parameters draw a unit cube.
+     *
+     * @param {number[][]} [pts] - 2D polygon vertices (must be convex)
+     * @param {number} [h] - extrusion height
+     * @returns {Geometry[]}
+     */
+    extrusion(pts = [[0.5, 0.5], [-0.5, 0.5], [-0.5, -0.5], [0.5, -0.5]], h = 1) {
+        const vertices = [pts.at(-1), ...pts];
+        const segments = pts.length - 2;
+        const f = d => (u, v) => [pts[v ? 0 : 1 + u|0][0], pts[v ? 0 : 1 + u|0][1], d/2];
+
+        return [
+            this.surface(f(h), [segments, 0, segments], [0, 1, 1]),
+            this.surface(f(-h), [0, segments, segments], [0, 1, 1]),
+            pts.map(
+                (pt, n) => this.surface(
+                    (u, v) => [
+                        (u ? pt : vertices[n])[0],
+                        (u ? pt : vertices[n])[1],
+                        h / (v ? 2 : -2),
+                    ],
+                    [0, 1, 1], [0, 1, 1]
+                )
+            ),
+        ].flat(Infinity);
+    }
 }
