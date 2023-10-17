@@ -69,6 +69,14 @@ describe('Solid', () => {
     describe('extrusion method', () => {
         it('returns Geometry array', () => {
             const actual = subject.extrusion();
+            expect(actual.length).toEqual(3);
+            actual.forEach(obj => expectSurface(obj));
+        });
+    });
+
+    describe('polygonExtrusion method', () => {
+        it('returns Geometry array', () => {
+            const actual = subject.polygonExtrusion();
             expect(actual.length).toEqual(6);
             actual.forEach(obj => expectSurface(obj));
         });

@@ -97,12 +97,12 @@ export class Solid extends Shape {
      * Generate the surface of a general parametric volume.
      * The default arguments produce a properly oriented unit cube.
      * If drawing "single-sided", note that
-     * the function f naturally parametrizes the interior
+     * the function f naturally parameterizes the interior
      * of the volume, oriented with right-hand-rule,
      * so the "upward-facing" normals to the surface g(u, v) = f(u, v, k)
      * are outward-facing when k = w[1] (not k = w[0]).
      *
-     * @param {function} [f] - parameterization of the volume
+     * @param {function(number, number, number): number[]} [f] - parameterization of the volume
      * @param {number[]} [u] - [start, end, step] for u parameter (default [0, 1, 1])
      * @param {number[]} [v] - [start, end, step] for v parameter (default [0, 1, 1])
      * @param {number[]} [w] - [start, end, step] for w parameter (default [0, 1, 1])
@@ -126,11 +126,29 @@ export class Solid extends Shape {
      * The polygon is drawn in the x-y plane, and extruded along the z-axis.
      * The default parameters draw a unit cube.
      *
-     * @param {number[][]} [pts] - 2D polygon vertices (must be convex)
+     * @param {function(number): number[]} [f] - parameterized cross-section f(t) = [x, y]
+     * @param {number[]} [t] - [start, end, step] for the cross-section parameterization
      * @param {number} [h] - extrusion height
      * @returns {Geometry[]}
      */
-    extrusion(pts = [[0.5, 0.5], [-0.5, 0.5], [-0.5, -0.5], [0.5, -0.5]], h = 1) {
+    extrusion(f = t => [cos(t), sin(t)], t = [0, 2*pi], h = 1) {
+        return [
+            this.surface((u, v) => v ? [...f(u), h/2] : [0, 0, h/2], t, [0, 1, 1]),
+            this.surface((u, v) => v ? [...f(u), -h/2] : [0, 0, -h/2], t, [1, 0, 1]),
+            this.surface((u, v) => [...f(u), v], t, [-h/2, h/2, 1]),
+        ].flat(Infinity);
+    }
+
+    /**
+     * Generate the surface of an extruded convex polygon.
+     * The polygon is drawn in the x-y plane, and extruded along the z-axis.
+     * The default parameters draw a unit cube.
+     *
+     * @param {number[][]} [pts] - 2D polygon vertices (must enclose the origin "convex-ly")
+     * @param {number} [h] - extrusion height
+     * @returns {Geometry[]}
+     */
+    polygonExtrusion(pts = [[0.5, 0.5], [-0.5, 0.5], [-0.5, -0.5], [0.5, -0.5]], h = 1) {
         const vertices = [pts.at(-1), ...pts];
         const segments = pts.length - 2;
         const f = d => (u, v) => [pts[v ? 0 : 1 + u|0][0], pts[v ? 0 : 1 + u|0][1], d/2];

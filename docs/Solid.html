@@ -815,7 +815,7 @@
     
 
     
-    <h4 class="name" id="extrusion"><span class="type-signature"></span>extrusion<span class="signature">(pts<span class="signature-attributes">opt</span>, h<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Array.&lt;<a href="Geometry.html">Geometry</a>>}</span></h4>
+    <h4 class="name" id="extrusion"><span class="type-signature"></span>extrusion<span class="signature">(f<span class="signature-attributes">opt</span>, t<span class="signature-attributes">opt</span>, h<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Array.&lt;<a href="Geometry.html">Geometry</a>>}</span></h4>
     
 
     
@@ -865,13 +865,13 @@ The default parameters draw a unit cube.
 
         <tr>
             
-                <td class="name"><code>pts</code></td>
+                <td class="name"><code>f</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;Array.&lt;number>></span>
+<span class="param-type">function</span>
 
 
             
@@ -895,7 +895,44 @@ The default parameters draw a unit cube.
                 </td>
             
 
-            <td class="description last">2D polygon vertices (must be convex)</td>
+            <td class="description last">parameterized cross-section f(t) = [x, y]</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>t</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">[start, end, step] for the cross-section parameterization</td>
         </tr>
 
     
@@ -975,7 +1012,7 @@ The default parameters draw a unit cube.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Solid.js.html">Solid.js</a>, <a href="Solid.js.html#line133">line 133</a>
+        <a href="Solid.js.html">Solid.js</a>, <a href="Solid.js.html#line134">line 134</a>
     </li></ul></dd>
     
 
@@ -1172,6 +1209,220 @@ The default parameters draw a unit cube.
     <dd>
         
 <span class="param-type">Array.&lt;number></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="polygonExtrusion"><span class="type-signature"></span>polygonExtrusion<span class="signature">(pts<span class="signature-attributes">opt</span>, h<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Array.&lt;<a href="Geometry.html">Geometry</a>>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Generate the surface of an extruded convex polygon.
+The polygon is drawn in the x-y plane, and extruded along the z-axis.
+The default parameters draw a unit cube.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>pts</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;Array.&lt;number>></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">2D polygon vertices (must enclose the origin "convex-ly")</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>h</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    1
+                
+                </td>
+            
+
+            <td class="description last">extrusion height</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Solid.js.html">Solid.js</a>, <a href="Solid.js.html#line151">line 151</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array.&lt;<a href="Geometry.html">Geometry</a>></span>
 
 
     </dd>
@@ -3297,7 +3548,7 @@ The default parameters draw a unit cube.
     Generate the surface of a general parametric volume.
 The default arguments produce a properly oriented unit cube.
 If drawing "single-sided", note that
-the function f naturally parametrizes the interior
+the function f naturally parameterizes the interior
 of the volume, oriented with right-hand-rule,
 so the "upward-facing" normals to the surface g(u, v) = f(u, v, k)
 are outward-facing when k = w[1] (not k = w[0]).
